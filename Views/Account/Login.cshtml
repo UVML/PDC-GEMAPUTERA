@@ -1,0 +1,176 @@
+@{
+    Layout = null;
+}
+
+@model sistem_e_daftar_gemaputera.Models.User
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Pendaftaran</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            display: flex;
+            transition: 1s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+            </div>
+            <div class="col-auto">
+                <div class="card" style="background-color: rgba(255, 255, 255, 0.8); width:400px">
+                    <div class="card-header text-center">
+                        <h3 class="text-primary">Sistem Pendaftaran</h2>
+                    </div>
+                    <div class="card-body">
+                        <nav>
+                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Masuk</button>
+                                <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Daftar Baru</button>
+                            </div>
+                        </nav>
+                        <div class="tab-content p-2" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="text-center">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h4>KEJOHANAN SUKAN GEMAPUTERA PULAU PINANG
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col">
+                                            <img src="~/images/gemaputeraxvi.png" height="150px" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <form action="Login" method="post" class="mb-3">
+                                    <div class="mb-3">
+                                        <input type="text" id="email" name="email" class="form-control"
+                                            placeholder="Emel Pengguna" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <input type="password" id="password" name="password" class="form-control"
+                                            placeholder="Kata Laluan" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary form-control">Log Masuk</button>
+                                </form>
+
+                                <a href="" class="small">Lupa Kata Laluan</a>
+                            </div>
+                            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+
+                                <p class="text-center small">Daftar Sebagai Sekretariat Kontinjen</p>
+
+                                <form action="Register" method="post" class="mb-3">
+                                    <div class="mb-3">
+                                        <input asp-for="Email" type="text" class="form-control" placeholder="Emel Pengguna" onchange="OnDaftar_CheckEmail()" required pattern="[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <input asp-for="FullName" class="form-control" placeholder="Nama Penuh" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <input asp-for="Designation" class="form-control" placeholder="Jawatan" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <input asp-for="Contact" class="form-control" placeholder="No Telephone (HP)" required pattern="[0]{3}[-]?[0]{6,8}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <select asp-for="Agency" class="form-control" required>
+                                            <option disabled selected>Pilih Nama Agensi</option>
+                                            <option>Johor Corporation</option>
+                                            <option>Perbadanan Kemajuan Ekonomi Sarawak</option>
+                                            <option>Perbadanan Kemajuan Iktisad Negeri Kelantan</option>
+                                            <option>Perbadanan Kemajuan Negeri Kedah</option>
+                                            <option>Perbadanan Kemajuan Negeri Melaka</option>
+                                            <option>Perbadanan Kemajuan Negeri Pahang</option>
+                                            <option>Perbadanan Kemajuan Negeri Perak</option>
+                                            <option>Perbadanan Kemajuan Negeri Perlis</option>
+                                            <option>Perbadanan Kemajuan Negeri Selangor</option>
+                                            <option>Perbadanan Kemajuan Negeri, Negeri Sembilan</option>
+                                            <option>Perbadanan Memajukan Iktisad Negeri Terengganu</option>
+                                            <option>Perbadanan Pembangunan Ekonomi Negeri Sabah</option>
+                                            <option>Perbadanan Pembangunan Pulau Pinang</option>
+                                            <option>UDA Holdings Berhad</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <input asp-for="Password" type="password" class="form-control" placeholder="Kata Laluan" onkeyup="OnDaftar_CheckPassword()" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <input Id="Password2" type="password"  class="form-control" placeholder="Pengesahan Kata Laluan" onkeyup="OnDaftar_CheckPassword()">
+                                    </div>
+                                    <button id="Daftar" type="submit" class="btn btn-primary form-control">Daftar</button>
+                                    @if(ViewBag.IsError == true)
+                                    {
+                                        <span>Pendaftaran Gagal</span>
+                                    }
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        var images = [
+            '/images/bg01.jpg',
+            '/images/bg02.jpg',
+            '/images/bg03.jpg',
+            // Add more image paths as needed
+        ];
+
+        var index = 0;
+
+        function changeBackground() {
+            document.body.style.backgroundImage = 'url(' + images[index] + ')';
+            index = (index + 1) % images.length; // Loop through the images
+            setTimeout(changeBackground, 3000); // Change background every 3 seconds
+        }
+
+        function OnDaftar_CheckPassword() {
+            var a = $("#Password").val()
+            var b = $("#Password2").val()
+            console.log(a==b)
+            $("#Daftar").prop("disabled", a!=b);
+            
+        }
+        function OnDaftar_CheckEmail() {
+            $.get('CheckEmail?Email=' + $("#Email").val(),function(response) {
+               $("#Daftar").prop("disabled", response); 
+            });
+        }
+
+        $(document).ready(function () {
+            changeBackground();
+            $("#Daftar").prop("disabled", true);
+        });
+
+      
+    </script>
+</body>
+
+</html>
