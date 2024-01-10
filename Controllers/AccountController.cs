@@ -16,6 +16,9 @@ public class AccountController : Controller
 
     public async Task<ActionResult> Login()
     {
+        var _registeredAgencies = _Db.Users.AsNoTracking().Select(x=>x.Agency).Distinct();
+        ViewBag.Agencies        = await _Db.Agencies.AsNoTracking().Select(x=>x.Name).Except(_registeredAgencies).ToListAsync();
+
         return View();
     }
 
@@ -67,9 +70,5 @@ public class AccountController : Controller
 
     }
 
-    public async Task<bool> CheckEmail(string Email)
-    {
-        return await _Db.Users.AnyAsync(x=>x.Email == Email);        
-    }
-
+   
 }

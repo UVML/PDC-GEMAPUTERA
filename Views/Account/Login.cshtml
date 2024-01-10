@@ -81,7 +81,16 @@
 
                                 <form action="Register" method="post" class="mb-3">
                                     <div class="mb-3">
-                                        <input asp-for="Email" type="text" class="form-control" placeholder="Emel Pengguna" onchange="OnDaftar_CheckEmail()" required pattern="[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
+                                        <select asp-for="Agency" class="form-control" required onchange="OnDaftar_Check()">
+                                            <option value="0" disabled selected>Pilih Nama Agensi</option>
+                                            @foreach(var Agency in ViewBag.Agencies)
+                                            {
+                                                <option>@Agency</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <input asp-for="Email" type="text" class="form-control" placeholder="Emel Pengguna" required pattern="[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
                                     </div>
                                     <div class="mb-3">
                                         <input asp-for="FullName" class="form-control" placeholder="Nama Penuh" required>
@@ -92,37 +101,15 @@
                                     <div class="mb-3">
                                         <input asp-for="Contact" class="form-control" placeholder="No Telephone (HP)" required pattern="[0]{3}[-]?[0]{6,8}">
                                     </div>
+                                    
                                     <div class="mb-3">
-                                        <select asp-for="Agency" class="form-control" required>
-                                            <option disabled selected>Pilih Nama Agensi</option>
-                                            <option>Johor Corporation</option>
-                                            <option>Perbadanan Kemajuan Ekonomi Sarawak</option>
-                                            <option>Perbadanan Kemajuan Iktisad Negeri Kelantan</option>
-                                            <option>Perbadanan Kemajuan Negeri Kedah</option>
-                                            <option>Perbadanan Kemajuan Negeri Melaka</option>
-                                            <option>Perbadanan Kemajuan Negeri Pahang</option>
-                                            <option>Perbadanan Kemajuan Negeri Perak</option>
-                                            <option>Perbadanan Kemajuan Negeri Perlis</option>
-                                            <option>Perbadanan Kemajuan Negeri Selangor</option>
-                                            <option>Perbadanan Kemajuan Negeri, Negeri Sembilan</option>
-                                            <option>Perbadanan Memajukan Iktisad Negeri Terengganu</option>
-                                            <option>Perbadanan Pembangunan Ekonomi Negeri Sabah</option>
-                                            <option>Perbadanan Pembangunan Pulau Pinang</option>
-                                            <option>UDA Holdings Berhad</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <input asp-for="Password" type="password" class="form-control" placeholder="Kata Laluan" onkeyup="OnDaftar_CheckPassword()" required>
+                                        <input asp-for="Password" type="password" class="form-control" placeholder="Kata Laluan" onkeyup="OnDaftar_Check()" required>
                                     </div>
 
                                     <div class="mb-3">
-                                        <input Id="Password2" type="password"  class="form-control" placeholder="Pengesahan Kata Laluan" onkeyup="OnDaftar_CheckPassword()">
+                                        <input Id="Password2" type="password"  class="form-control" placeholder="Pengesahan Kata Laluan" onkeyup="OnDaftar_Check()">
                                     </div>
-                                    <button id="Daftar" type="submit" class="btn btn-primary form-control">Daftar</button>
-                                    @if(ViewBag.IsError == true)
-                                    {
-                                        <span>Pendaftaran Gagal</span>
-                                    }
+                                    <button id="Daftar" type="submit" class="btn btn-primary form-control">Daftar</button>                                   
                                 </form>
                             </div>
                         </div>
@@ -151,18 +138,16 @@
             setTimeout(changeBackground, 3000); // Change background every 3 seconds
         }
 
-        function OnDaftar_CheckPassword() {
-            var a = $("#Password").val()
-            var b = $("#Password2").val()
-            console.log(a==b)
-            $("#Daftar").prop("disabled", a!=b);
+        function OnDaftar_Check() {
+        
+            var criteria1 = $("#Password").val() == $("#Password2").val();
+            var criteria2 = $("#Agency").val() != null;
+            console.log("1",criteria1)
+            console.log("2",criteria2)
+            $("#Daftar").prop("disabled", !(criteria1 && criteria2));
             
         }
-        function OnDaftar_CheckEmail() {
-            $.get('CheckEmail?Email=' + $("#Email").val(),function(response) {
-               $("#Daftar").prop("disabled", response); 
-            });
-        }
+        
 
         $(document).ready(function () {
             changeBackground();
