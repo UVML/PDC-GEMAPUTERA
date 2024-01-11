@@ -1,0 +1,272 @@
+<div id="app">
+
+    <div class="row mb-3">
+        <div class="col">
+        </div>
+        <div class="col-auto">
+
+            <select class="form-control-sm" v-model="selectedSukan" @@change="getData()">
+                <option disabled selected>Senarai Sukan</option>
+                @foreach (var item in ViewBag.SenaraiSukan)
+                {
+                    <option>@item</option>
+                }
+            </select>
+
+            <button class="btn btn-primary btn-sm" @@click="simpan()" >Simpan</button>
+
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">
+            Pengurus
+        </div>
+        <div class="card-body">
+            <div class="row mb-1" v-for="(item, index) in getPengurus">
+                <div class="col">
+                    <div class="table-responsive">
+
+                        <table class="table-sm">
+                            <tr>
+                                <td style="width:15px"><span class="badge bg-primary"> {{index + 1}}</span></td>
+                                <td>
+                                    <input v-model="item.namaPenuh" placeholder="Nama Penuh" class="form-control-sm">
+                                </td>
+                                <td>
+                                    <input v-model="item.telefon" placeholder="No Telefon" class="form-control-sm">
+                                </td>
+                                <td>
+                                    <input v-model="item.noKP" placeholder="No KP" class="form-control-sm">
+                                </td>
+                                <td>
+                                    <input v-model="item.noPekerja" placeholder="No Pekerja" class="form-control-sm">
+                                </td>
+                                <td>
+                                    <input v-model="item.noKWSP" placeholder="No KWSP/KWAP" class="form-control-sm">
+                                </td>
+                                <td>
+                                    <input v-model="item.tarafJawatan" placeholder="Taraf Jawatan" class="form-control-sm">
+                                </td>
+                                <td>
+                                    <input v-model="item.kumpulanJawatan" placeholder="Kumpulan Jawatan" class="form-control-sm">
+                                </td>
+                                <td>
+                                    <input v-model="item.kategoriPermainan" placeholder="Kategori Jawatan" class="form-control-sm">
+                                </td>
+                                <td>
+                                    <input v-model="item.gredJawatan" placeholder="Gred Jawatan" class="form-control-sm">
+                                </td>
+                            </tr>                            
+                        </table>
+                        <span class="small text-secondary" style="margin-left:34px">Lampiran:</span>
+                        <table>
+                            <tr> 
+                                <td style="width:34px"></td>                               
+                                <td>
+                                    <button class="btn btn-sm btn-outline-dark" @@click="openDialog('Gambar Passport', item, 'fileGambar', '.jpg')">Gambar Passport <span v-if="item.fileGambar" class="fa-solid fa-check"></span></button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-dark" @@click="openDialog('Kad Pengenalan', item, 'fileKP', '.jpg')">Kad Pengenalan <span v-if="item.fileKP" class="fa-solid fa-check"></span></button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-dark" @@click="openDialog('KWSP/KWAP Majikan', item, 'fileKWSP', '.pdf,.jpg')">KWSP/KWAP Majikan <span v-if="item.fileKWSP" class="fa-solid fa-check"></span></button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-dark" @@click="openDialog('Surat Pengesahan Majikan', item, 'fileMajikan', '.pdf,.jpg')">Pengesahan Majikan <span v-if="item.fileMajikan" class="fa-solid fa-check"></span></button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-dark" @@click="openDialog('Surat Lantikan Pengarah & SSM', item, 'fileSuratPerlantikan', '.pdf,.jpg')">Lembaga Pengarah & SSM <span v-if="item.fileSuratLantikan" class="fa-solid fa-check"></span></button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">
+            Jurulatih
+        </div>
+        <div class="card-body">
+            <div class="row" v-for="item in getJurulatih">
+                <div class="col">
+                    <table>
+                        <tr>
+                            <td><input></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">
+            Fisio
+        </div>
+        <div class="card-body">
+            <div class="row" v-for="item in getFisio">
+                <div class="col">
+                    <table>
+                        <tr>
+                            <td><input></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            Pemain
+        </div>
+        <div class="card-body">
+            <div class="row" v-for="item in getPemain">
+                <div class="col">
+                    <table>
+                        <tr>
+                            <td><input></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">{{selectedUploadDialogHeader}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <input type="file" class="form-control" @@change="handleFileChange(selectedUploadDialogRecord)" :accept="selectedUploadDialogExtension">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" @@click="uploadFile()">Upload</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+@section Scripts {
+    <script>        
+        var app = new Vue({
+            el: '#app',
+            data: {
+                selectedSukan: "Senarai Sukan",
+                record: [],
+                selectedUploadDialogHeader: '',                
+                selectedUploadDialogRecord: '',
+                selectedUploadDialogTarget: '',
+                activeUploadFile: '',
+                selectedUploadDialogExtension: ''
+            },
+            computed: {
+                getPengurus: function () {
+                    return this.record.filter(x => x.jenisAhli.toLocaleLowerCase() === 'pengurus');
+                },
+
+                getJurulatih: function () {
+                    return this.record.filter(x => x.jenisAhli.toLocaleLowerCase() === 'jurulatih');
+                },
+
+                getFisio: function () {
+                    return this.record.filter(x => x.jenisAhli.toLocaleLowerCase() === 'fisio');
+                },
+
+                getPemain: function () {
+                    return this.record.filter(x => x.jenisAhli.toLocaleLowerCase() === 'pemain');
+                }
+            },
+            methods: {
+                getData: function () {
+                    $.ajax({
+                        url: 'getPasukan',
+                        type: 'GET',
+                        data: { jenisSukan: app.selectedSukan },
+                        success: function (data) {
+                            app.record = data;                            
+                        },
+                        error: function (error) {
+                            app.record = [];
+                            toastr.error('Data gagal dimuatkan');
+                        }
+                    });
+                },
+
+                openDialog: function (headerText, record, target, extension) {
+                    app.selectedUploadDialogHeader = headerText;
+                    app.selectedUploadDialogRecord = record;
+                    app.selectedUploadDialogTarget = target;
+                    app.selectedUploadDialogExtension = extension;
+
+                    $('#exampleModal').modal('show');
+                },
+
+                simpan: function () {
+                    $.ajax({
+                        url: 'setPasukan',
+                        type: 'POST',
+                        data: { data: app.record },
+                        success: function (data) {
+                            
+                            if(data.status == true)
+                            {
+                                console.log('masuk');
+                                toastr.success('Data berjaya disimpan');
+                            }
+                            else
+                            {
+                                toastr.error('Data gagal disimpan');
+                            }
+                        },
+                        error: function (error) {
+                            toastr.error('Data gagal disimpan');
+                        }
+                    });                    
+                },
+
+                handleFileChange(index) {
+                    app.activeUploadFile = event.target.files[0];                    
+                },
+
+                uploadFile: function () {
+
+                    app.selectedUploadDialogRecord[app.selectedUploadDialogTarget] = app.activeUploadFile.name;
+                    console.log(app.selectedUploadDialogRecord);
+
+                    var formData = new FormData();
+                    formData.append('file', app.activeUploadFile);
+                    formData.append('data', JSON.stringify(app.selectedUploadDialogRecord));
+
+                    $.ajax({
+                        url: 'uploadFile',
+                        type: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            console.log(data);
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
+                    });
+                }
+
+
+            },
+        })
+    </script>
+}

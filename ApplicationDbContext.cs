@@ -9,6 +9,11 @@ public class ApplicationDbContext : DbContext
     {
     }
 
-    public DbSet<User> Users {get; set;}
-    public DbSet<Agency> Agencies {get; set;}
+    public DbSet<Pengguna> Pengguna {get; set;}
+    
+    public DbSet<Agensi> Agensi {get; set;}
+
+    public DbSet<Ahli> Ahli {get; set;}
+    
+    public DbSet<Sukan> Sukan {get; set;}
 }

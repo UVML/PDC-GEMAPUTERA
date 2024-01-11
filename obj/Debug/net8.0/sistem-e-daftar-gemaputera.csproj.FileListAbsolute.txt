@@ -70,3 +70,4 @@ C:\UVML\sistem-e-daftar-gemaputera\bin\Debug\net8.0\runtimes\win\lib\net6.0\Syst
 C:\UVML\sistem-e-daftar-gemaputera\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 C:\UVML\sistem-e-daftar-gemaputera\obj\Debug\net8.0\sistem-e-daftar-gemaputera.csproj.AssemblyReference.cache
 C:\UVML\sistem-e-daftar-gemaputera\obj\Debug\net8.0\sistem-e-daftar-gemaputera.csproj.CopyComplete
+C:\UVML\sistem-e-daftar-gemaputera\bin\Debug\net8.0\Newtonsoft.Json.dll

@@ -2,7 +2,7 @@
     Layout = null;
 }
 
-@model sistem_e_daftar_gemaputera.Models.User
+@model sistem_e_daftar_gemaputera.Models.Pengguna
 
 <!DOCTYPE html>
 <html lang="en">
@@ -81,7 +81,7 @@
 
                                 <form action="Register" method="post" class="mb-3">
                                     <div class="mb-3">
-                                        <select asp-for="Agency" class="form-control" required onchange="OnDaftar_Check()">
+                                        <select asp-for="Agensi" class="form-control" required onchange="OnDaftar_Check()">
                                             <option value="0" disabled selected>Pilih Nama Agensi</option>
                                             @foreach(var Agency in ViewBag.Agencies)
                                             {
@@ -90,24 +90,24 @@
                                         </select>
                                     </div>
                                     <div class="mb-3">
-                                        <input asp-for="Email" type="text" class="form-control" placeholder="Emel Pengguna" required pattern="[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
+                                        <input asp-for="Emel" type="text" class="form-control" placeholder="Emel Pengguna" required pattern="[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
                                     </div>
                                     <div class="mb-3">
-                                        <input asp-for="FullName" class="form-control" placeholder="Nama Penuh" required>
+                                        <input asp-for="NamaPenuh" class="form-control" placeholder="Nama Penuh" required>
                                     </div>
                                     <div class="mb-3">
-                                        <input asp-for="Designation" class="form-control" placeholder="Jawatan" required>
+                                        <input asp-for="Jawatan" class="form-control" placeholder="Jawatan" required>
                                     </div>
                                     <div class="mb-3">
-                                        <input asp-for="Contact" class="form-control" placeholder="No Telephone (HP)" required pattern="[0]{3}[-]?[0]{6,8}">
+                                        <input asp-for="Telefon" class="form-control" placeholder="No Telephone (HP)" required pattern="[0]{3}[-]?[0]{6,8}">
                                     </div>
                                     
                                     <div class="mb-3">
-                                        <input asp-for="Password" type="password" class="form-control" placeholder="Kata Laluan" onkeyup="OnDaftar_Check()" required>
+                                        <input asp-for="KataLaluan" type="password" class="form-control" placeholder="Kata Laluan" onkeyup="OnDaftar_Check()" required>
                                     </div>
 
                                     <div class="mb-3">
-                                        <input Id="Password2" type="password"  class="form-control" placeholder="Pengesahan Kata Laluan" onkeyup="OnDaftar_Check()">
+                                        <input Id="KataLaluan2" type="password"  class="form-control" placeholder="Pengesahan Kata Laluan" onkeyup="OnDaftar_Check()">
                                     </div>
                                     <button id="Daftar" type="submit" class="btn btn-primary form-control">Daftar</button>                                   
                                 </form>
@@ -140,8 +140,8 @@
 
         function OnDaftar_Check() {
         
-            var criteria1 = $("#Password").val() == $("#Password2").val();
-            var criteria2 = $("#Agency").val() != null;
+            var criteria1 = $("#KataLaluan").val() == $("#KataLaluan2").val();
+            var criteria2 = $("#Agensi").val() != null;
             console.log("1",criteria1)
             console.log("2",criteria2)
             $("#Daftar").prop("disabled", !(criteria1 && criteria2));

@@ -14,11 +14,17 @@ public class AccountController : Controller
         _Db = applicationDbContext;
     }
 
+    private async Task<List<string>> GetAgencies()
+    {
+        var _registeredAgencies = _Db.Pengguna.AsNoTracking().Select(x=>x.Agensi).Distinct();
+        return await _Db.Agensi.AsNoTracking().Select(x=>x.Nama).Except(_registeredAgencies).ToListAsync();
+    }
+
+
     public async Task<ActionResult> Login()
     {
-        var _registeredAgencies = _Db.Users.AsNoTracking().Select(x=>x.Agency).Distinct();
-        ViewBag.Agencies        = await _Db.Agencies.AsNoTracking().Select(x=>x.Name).Except(_registeredAgencies).ToListAsync();
-
+        
+        ViewBag.Agencies = await GetAgencies();
         return View();
     }
 
@@ -31,13 +37,14 @@ public class AccountController : Controller
     [HttpPost]
     public async Task<ActionResult> Login(string email, string password)
     {
-        var _query = await _Db.Users.AsNoTracking().SingleOrDefaultAsync(x => x.Email == email);
+        var _query = await _Db.Pengguna.AsNoTracking().SingleOrDefaultAsync(x => x.Emel == email);
 
-        if (_query != null && _query.Password == password)
+        if (_query != null && _query.KataLaluan == password)
         {
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name, _query.Email)                
+                new Claim(ClaimTypes.Name, _query.Emel),
+                new Claim(ClaimTypes.Role, _query.Agensi)          
             };
 
             var _identity  = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -45,30 +52,33 @@ public class AccountController : Controller
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, _principal);
 
+
             return RedirectToAction("Index", "Home");
+
         }
         else
         {
+            ViewBag.Agencies = await GetAgencies();
             return View();
         }
 
     }
 
     [HttpPost]
-    public async Task<ActionResult> Register(User user)
+    public async Task<ActionResult> Register(Pengguna pengguna)
     {
         try
         {
-            await _Db.AddAsync(user);
+            await _Db.AddAsync(pengguna);
             await _Db.SaveChangesAsync();
+
             return RedirectToAction("Login");
         }
         catch
         {
-            return View("Login", user);
+            return View("Login", pengguna);
         }
 
     }
 
-   
 }
