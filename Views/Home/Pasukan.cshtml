@@ -1,29 +1,32 @@
 <div id="app">
 
     <div class="row mb-3">
-        <div class="col">
+        <div class="col">            
         </div>
         <div class="col-auto">
-                    <span class="fa-solid fa-chevron-right"></span>
-                    <select class="form-control-sm" style="width: 200px;" v-model="selectedSukan" @@change="getData()">
-                        <option disabled selected>Pilih Sukan</option>
-                        @foreach (var item in ViewBag.SenaraiSukan)
-                        {
-                            <option>@item</option>
-                        }
-                    </select>
-                    <button class="btn btn-outline-primary btn-sm" @@click="simpan()">Simpan</button>
-                    &nbsp;
-                    &nbsp;
-                    <a href="/Home/Index" class="btn btn-outline-secondary btn-sm"><span
-                            class="fa-solid fa-arrow-left" title="Kembali"></span></a>
-                    <button class="btn btn-outline-danger btn-sm" @@click="padam()"><span
-                            class="fa-solid fa-trash" title="Padam"></span></button>
+
+            <select class="form-control-sm" style="width: 200px;" v-model="selectedSukan" @@change="getData()">
+                <option disabled selected>Pilih Sukan</option>
+                @foreach (var item in ViewBag.SenaraiSukan)
+                {
+                    <option>@item</option>
+                }
+            </select>
+            <button class="btn btn-outline-primary btn-sm" @@click="simpan()">Simpan</button>
+            &nbsp;
+            &nbsp;
+            <a href="/Home/Index" class="btn btn-outline-secondary btn-sm"><span class="fa-solid fa-arrow-left"
+                    title="Kembali"></span></a>
+            <button class="btn btn-outline-danger btn-sm" @@click="padam()"><span class="fa-solid fa-trash"
+                    title="Padam"></span></button>
 
         </div>
     </div>
 
-    <p class="small">Semua adalah wajib kecuali lampiran "Surat Pengarah & SSM"</p>
+
+
+    <span class="tiny text-secondary">Semua adalah wajib kecuali "Kategori Permainan" & lampiran "Surat Pengarah
+        SSM"</span>
     <div class="card mb-3">
         <div class="card-header">
             <span class="fa-solid fa-user-tie"></span> <span class="text-primary">Pengurus</span>
@@ -104,6 +107,8 @@
         </div>
     </div>
 
+    <span class="tiny text-secondary">Semua adalah wajib kecuali "Kategori Permainan" & lampiran "Surat Pengarah
+        SSM"</span>
     <div class="card mb-3">
         <div class="card-header">
             <span class="fa-solid fa-person-chalkboard"></span> <span class="text-primary">Jurulatih</span>
@@ -121,6 +126,8 @@
         </div>
     </div>
 
+    <span class="tiny text-secondary">Semua adalah wajib kecuali "Kategori Permainan" & lampiran "Surat Pengarah
+        SSM"</span>
     <div class="card mb-3">
         <div class="card-header">
             <span class="fa-solid fa-user-doctor"></span> <span class="text-primary">Fisio</span>
@@ -138,6 +145,7 @@
         </div>
     </div>
 
+    <span class="tiny text-secondary">Semua adalah wajib kecuali lampiran "Surat Pengarah SSM"</span>
     <div class="card">
         <div class="card-header">
             <span class="fa-solid fa-people-group"></span> <span class="text-primary">Pemain</span>
@@ -180,6 +188,7 @@
 
 @section Scripts {
     <script>
+ 
         var app = new Vue({
             el: '#app',
             data: {
@@ -190,7 +199,11 @@
                 selectedUploadDialogTarget: '',
                 activeUploadFile: '',
                 selectedUploadDialogExtension: '',
-                KategoriList: []
+                KategoriList: [],
+                test:''
+            },
+            mounted() {
+                
             },
             computed: {
                 getPengurus: function () {
@@ -218,6 +231,11 @@
                         success: function (data) {
                             app.record = data.pasukan;
                             app.KategoriList = data.kategori;
+                            
+                            $('.taraf-jawatan').select2({
+                                placeholder: 'Pilih Taraf Jawatan',
+                                allowClear: true
+                            });
                         },
                         error: function (error) {
                             app.record = [];
@@ -323,6 +341,10 @@
                     }
                 }
             },
-        })
+        });
+    
+        
+	
+        
     </script>
 }

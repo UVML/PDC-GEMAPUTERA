@@ -317,6 +317,22 @@
       "PackagePath": "staticwebassets\\uploads\\32\\20210427_134521.jpg"
     },
     {
+      "Id": "C:\\UVML\\sistem-e-daftar-gemaputera\\wwwroot\\uploads\\50\\Jivan R.jpg",
+      "PackagePath": "staticwebassets\\uploads\\50\\Jivan R.jpg"
+    },
+    {
+      "Id": "C:\\UVML\\sistem-e-daftar-gemaputera\\wwwroot\\uploads\\78\\20210427_134429.jpg",
+      "PackagePath": "staticwebassets\\uploads\\78\\20210427_134429.jpg"
+    },
+    {
+      "Id": "C:\\UVML\\sistem-e-daftar-gemaputera\\wwwroot\\uploads\\82\\20210427_134429.jpg",
+      "PackagePath": "staticwebassets\\uploads\\82\\20210427_134429.jpg"
+    },
+    {
+      "Id": "C:\\UVML\\sistem-e-daftar-gemaputera\\wwwroot\\uploads\\Perbadanan Pembangunan Pulau Pinang\\Tenaga.pdf",
+      "PackagePath": "staticwebassets\\uploads\\Perbadanan Pembangunan Pulau Pinang\\Tenaga.pdf"
+    },
+    {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.sistem-e-daftar-gemaputera.props",
       "PackagePath": "build\\sistem-e-daftar-gemaputera.props"
     },

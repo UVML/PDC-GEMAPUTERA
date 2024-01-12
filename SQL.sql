@@ -53,7 +53,7 @@ CREATE TABLE [Ahli] (
 	FileKP varchar(100),
 	FileKWSP varchar(100),
 	FileMajikan varchar(100),
-	FileSuratLantikan varchar(100)
+	FileSuratLantikan varchar(100),
 	Telefon varchar(100),
 	GredJawatan varchar(100)
 )

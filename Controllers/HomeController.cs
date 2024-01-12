@@ -6,6 +6,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using Newtonsoft.Json;
 using sistem_e_daftar_gemaputera.Models;
 
@@ -15,12 +16,15 @@ namespace sistem_e_daftar_gemaputera.Controllers;
 public class HomeController : Controller
 {
     private readonly ApplicationDbContext _Db;
+    
+    private readonly IConfiguration _Configuration;
 
-    public HomeController(ApplicationDbContext applicationDbContext)
+    public HomeController(ApplicationDbContext applicationDbContext, IConfiguration configuration)
     {
-        _Db = applicationDbContext;
+        _Db = applicationDbContext;   
+        _Configuration = configuration;     
     }
-
+    
     #region Main Page - Index View
 
     [Authorize]
@@ -34,15 +38,25 @@ public class HomeController : Controller
         {
             Sukan = x.Key,
             Fee = _sukan.Where(y => y.Nama == x.Key).Single().Fee,
-            Pengurus = x.Where(y => y.JenisAhli == "Pengurus").FirstOrDefault()?.NamaPenuh,
-            Jurulatih = x.Where(y => y.JenisAhli == "Jurulatih").FirstOrDefault()?.NamaPenuh,
-            Fisio = _sukan.Where(y => y.Nama == x.Key).Single().KonfigurasiAhli.Single(y => y.JenisAhli == "Fisio").Size > 0 ? x.Where(y => y.JenisAhli == "Fisio").FirstOrDefault()?.NamaPenuh : "Tidak Perlu",
-            Lengkap = x.Where(y => y.JenisAhli == "Pemain" & y.IsCompleted).Count(),
+            Pengurus = x.Where(y => y.JenisAhli == "Pengurus").All(x=>x.IsCompleted),
+            Jurulatih = x.Where(y => y.JenisAhli == "Jurulatih").FirstOrDefault()?.IsCompleted,
+            Fisio = _sukan.Where(y => y.Nama == x.Key).Single().KonfigurasiAhli.Single(y => y.JenisAhli == "Fisio").Size > 0 ? x.Where(y => y.JenisAhli == "Fisio").All(z=>z.IsCompleted): true,
+            Pemain = x.Where(y => y.JenisAhli == "Pemain" & y.IsCompleted).Count(),
             Bilangan = x.Where(y => y.JenisAhli == "Pemain").Count(),
+
+            Pengurus_Gambar = x.Where(y => y.JenisAhli == "Pengurus").FirstOrDefault()?.FileGambar,
+            Pengurus_Id = x.Where(y => y.JenisAhli == "Pengurus").FirstOrDefault()?.Id,
+
+            Jurulatih_Gambar = x.Where(y => y.JenisAhli == "Jurulatih").FirstOrDefault()?.FileGambar,
+            Jurulatih_Id = x.Where(y => y.JenisAhli == "Jurulatih").FirstOrDefault()?.Id,
         }).ToList();
 
         ViewBag.TotalFee = _model.Sum(x => x.Fee).ToString("#,##0.00");
         ViewBag.Agensi = _agensi;
+        
+        ViewBag.BankName    = _Configuration.GetSection("Payment").GetValue<string>("BankName");
+        ViewBag.BankAccount = _Configuration.GetSection("Payment").GetValue<string>("BankAccount");
+
         return View(_model);
     }
 

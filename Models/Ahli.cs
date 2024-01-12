@@ -30,13 +30,14 @@ public class Ahli
     {
         get
         {
+
             if (string.IsNullOrEmpty(NamaPenuh) == false &&
                 string.IsNullOrEmpty(NoKP) == false &&
                 string.IsNullOrEmpty(NoPekerja) == false &&
                 string.IsNullOrEmpty(NoKWSP) == false &&
                 string.IsNullOrEmpty(TarafJawatan) == false &&
                 string.IsNullOrEmpty(KumpulanJawatan) == false &&
-                string.IsNullOrEmpty(KategoriPermainan) == false &&
+                (JenisAhli=="Pemain" ? string.IsNullOrEmpty(KategoriPermainan) == false : true) &&
                 string.IsNullOrEmpty(FileGambar) == false &&
                 string.IsNullOrEmpty(FileKP) == false &&
                 string.IsNullOrEmpty(FileKWSP) == false &&
@@ -44,6 +45,21 @@ public class Ahli
                 string.IsNullOrEmpty(Telefon) == false &&
                 string.IsNullOrEmpty(GredJawatan) == false
             )
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+
+    [NotMapped]
+    public bool IsResit{
+        get
+        {
+            if (System.IO.Directory.GetFiles($"wwwroot/uploads/{Agensi}/").Count() > 0)
             {
                 return true;
             }

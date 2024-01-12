@@ -17,12 +17,13 @@
             <input v-model="item.noKWSP" placeholder="No KWSP/KWAP" class="form-control-sm" :class="{'is-valid' : !IsEmpty(item.noKWSP)}"/>
         </td>
         <td>
-            <select v-model="item.tarafJawatan" title="Taraf Jawatan"  class="form-control-sm" :class="{'is-valid' : !IsEmpty(item.tarafJawatan)}">
+            <select v-model="item.tarafJawatan" title="Taraf Jawatan"  class="form-control-sm taraf-jawatan" :class="{'is-valid' : !IsEmpty(item.tarafJawatan)}">
                 <option selected disabled>Taraf Jawatan</option>
                 <option>Tetap</option>
                 <option>Kontrak</option>
                 <option>MyStep</option>
-            </select>
+            </select> 
+            
         </td>
         <td>
             <select v-model="item.kumpulanJawatan" title="Kumpulan Jawatan" class="form-control-sm" :class="{'is-valid' : !IsEmpty(item.kumpulanJawatan)}">
@@ -37,9 +38,8 @@
         </td>
         <td>
             <select v-model="item.kategoriPermainan" title="Kategori Permainan" class="form-control-sm" :class="{'is-valid' : !IsEmpty(item.kategoriPermainan)}">
-                <option selected disabled>Kategori Permainan</option>
-               <option v-for="List in KategoriList">{{List}}</option>
-            </select>
+                <option v-for="List in KategoriList">{{List}}</option>
+            </select>           
         </td>
     </tr>
 </table>

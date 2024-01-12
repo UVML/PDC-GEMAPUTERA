@@ -2,6 +2,14 @@
 @{
     ViewData["Title"] = "Home Page";
 
+    string statusHelper(bool value)
+    {
+        if (value)
+            return "<span class='badge bg-success'>Lengkap</span>";
+        else
+            return "<span class='badge bg-danger'>Tidak Lengkap</span>";
+    }
+
 }
 
 <div id="app">
@@ -9,8 +17,9 @@
         <div class="col">
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home"
-                        type="button" role="tab" aria-controls="nav-home" aria-selected="true">@ViewBag.Agensi</button>
+                    <button class="nav-link active text-primary" id="nav-home-tab" data-bs-toggle="tab"
+                        data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
+                        aria-selected="true">@ViewBag.Agensi</button>
 
                 </div>
             </nav>
@@ -18,34 +27,39 @@
                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                     <div class="p-2">
                         <div class="border rounded p-2 mb-3 mt-3">
+                            <p class="small text-primary"><span class="fa-solid fa-chevron-down"></span> Bayaran </p>
                             <div class="row">
-                                <div class="col-4">
-                                    <p class="small text-primary"><span class="fa-solid fa-chevron-down"></span> Jumlah Bayaran </p>
-                                    <div class="border rounded p-3">
-                                        <h1>RM @ViewBag.TotalFee</h1>
-                                        <div v-if="Resit">
-                                            <a :href="'/uploads/@ViewBag.Agensi/' + Resit" target="_blank" class="text-dark">Lihat Resit</a>
-                                        </div>
+                                <div class="col-3">
+                                    <div class="p-3">
+                                        <h3>RM @ViewBag.TotalFee</h3>
+                                        <p class="small text-secondary">Selepas pendaftaran pasukan sudah lengkap dan muktamat,
+                                            sila buat bayaran dan muat naik resit.</p>
+                                        <pre class="small">@ViewBag.BankName<br>@ViewBag.BankAccount</pre>
                                     </div>
-                                    
-                                </div>
-                                <div class="col">
 
                                 </div>
-                                <div class="col">
-                                    <p class="small"><strong>Perakaun</strong>: Saya mengesahkan bahawa
-                                        segala
-                                        maklumat yang dinyatakan adalah benar seperti dalam borang
-                                        pendaftaran</p>
+
+                                <div class="col-3">
+
+                                    <p class="small text-secondary"><span class="text-dark">Perakaun</span>: Saya
+                                        mengesahkan bahawa, segala maklumat yang didaftarkan dalam sistem ini adalah benar.
+                                    </p>
 
                                     <div class="row mt-2">
                                         <div class="col">
-                                            <input type="file" class="form-control-sm" accept=".pdf,.jpg"
+                                            <input type="file" class="form-control" accept=".pdf,.jpg"
                                                 @@change="handleFileChange()">
                                         </div>
                                         <div class="col-auto">
-                                            <button class="btn btn-outline-dark btn-sm" @@click="uploadResit()">Muat Naik Resit</button>
+                                            <button class="btn btn-outline-dark btn" @@click="uploadResit()">Muat
+                                                Naik</button>
                                         </div>
+                                    </div>
+
+                                    <div v-if="Resit" class="mt-2 text-danger">
+                                        <span class="fa-solid fa-receipt"></span>
+                                        <a :href="'/uploads/@ViewBag.Agensi/' + Resit" target="_blank"
+                                            class="small">Lihat Resit</a>
                                     </div>
 
                                 </div>
@@ -55,16 +69,17 @@
                         <div class="border rounded p-2">
                             <div class="row mb-3">
                                 <div class="col">
-                                    <p class="small text-primary"><span class="fa-solid fa-chevron-down"></span> Senarai Pendaftaran</p>
+                                    <p class="small text-primary"><span class="fa-solid fa-chevron-down"></span> Senarai
+                                        Pendaftaran</p>
                                 </div>
                                 <div class="col-auto">
-                                    <a class="btn btn-primary btn-sm" asp-action="Pasukan">Kemaskini Pasukan</a>
+                                    <a class="btn btn-primary" asp-action="Pasukan">Kemaskini Pasukan</a>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col">
                                     <div class="table-responsive">
-                                        <table class="table table-sm">
+                                        <table class="table table-sm small">
                                             <tr>
                                                 <th></th>
                                                 <th>Sukan</th>
@@ -79,10 +94,11 @@
                                                 <th> <span class="fa-solid fa-user-doctor text-secondary small"></span>
                                                     Fisio
                                                 </th>
+                                                 <th><span class="fa-solid fa-people-group text-secondary small"></span>
+                                                    Pemain                                                    
+                                                </th>
                                                 <th><span class="fa-solid fa-people-group text-secondary small"></span>
-                                                    Bil
-                                                    Pemain
-                                                    Lengkap
+                                                    Bil Pemain                                                    
                                                 </th>
                                                 <th>
                                                     </td>
@@ -96,28 +112,24 @@
                                                     </td>
                                                     <td class="align-middle">@item.Sukan</td>
                                                     <td class="align-middle">RM @item.Fee.ToString("#,00.00")</td>
-                                                    <td class="align-middle">@item.Pengurus</td>
                                                     <td class="align-middle">
-                                                        @if (string.IsNullOrEmpty(item.Jurulatih))
+                                                        @if (item.Pengurus_Gambar != null)
                                                         {
-                                                            <span class="badge bg-danger">Sila Isi</span>
+                                                            <img class="img-sm rounded-circle" src='@Url.Content("~/uploads/" + item.Pengurus_Id + "/" + item.Pengurus_Gambar)' />
                                                         }
-                                                        else
-                                                        {
-                                                            @item.Jurulatih
-                                                        }
+                                                        
+                                                        @Html.Raw(statusHelper(item.Pengurus))
                                                     </td>
                                                     <td class="align-middle">
-                                                        @if (string.IsNullOrEmpty(item.Fisio))
+                                                         @if (item.Jurulatih_Gambar != null)
                                                         {
-                                                            <span class="badge bg-danger">Sila Isi</span>
+                                                            <img class="img-sm rounded-circle" src='@Url.Content("~/uploads/" + item.Jurulatih_Id + "/" + item.Jurulatih_Gambar)' />
                                                         }
-                                                        else
-                                                        {
-                                                            @item.Fisio
-                                                        }
+                                                        @Html.Raw(statusHelper(item.Jurulatih))
                                                     </td>
-                                                    <td class="align-middle">@item.Lengkap / @item.Bilangan</td>
+                                                    <td class="align-middle">@Html.Raw(statusHelper(item.Fisio))</td>
+                                                    <td class="align-middle">@Html.Raw(statusHelper(item.Pemain == item.Bilangan))</td>
+                                                    <td class="align-middle">@item.Pemain / @item.Bilangan</td>
                                                     <td></td>
                                                 </tr>
                                             }
@@ -140,8 +152,8 @@
         var app = new Vue({
             el: '#app',
             data: {
-                Resit: null, 
-                TempResit: null,               
+                Resit: null,
+                TempResit: null,
             },
             computed: {
 
@@ -154,9 +166,9 @@
                     app.TempResit = event.target.files[0];
                 },
 
-                getResit: function() {
+                getResit: function () {
                     $.ajax({
-                        url: 'getResit',
+                        url: '/Home/getResit',
                         type: 'GET',
                         success: function (data) {
                             if (data.status == true) {

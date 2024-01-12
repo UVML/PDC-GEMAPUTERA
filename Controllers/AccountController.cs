@@ -51,9 +51,15 @@ public class AccountController : Controller
             var _principal = new ClaimsPrincipal(_identity);
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, _principal);
-
-
-            return RedirectToAction("Index", "Home");
+            
+            if (email.ToLower() == "administrator")
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
 
         }
         else
