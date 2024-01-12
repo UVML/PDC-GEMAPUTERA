@@ -1,10 +1,6 @@
 {
   "Files": [
     {
-      "Id": "C:\\UVML\\sistem-e-daftar-gemaputera\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\sistem-e-daftar-gemaputera.bundle.scp.css",
-      "PackagePath": "staticwebassets\\sistem-e-daftar-gemaputera.bundle.scp.css"
-    },
-    {
       "Id": "C:\\UVML\\sistem-e-daftar-gemaputera\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
@@ -27,6 +23,26 @@
     {
       "Id": "C:\\UVML\\sistem-e-daftar-gemaputera\\wwwroot\\images\\gemaputeraxvi.png",
       "PackagePath": "staticwebassets\\images\\gemaputeraxvi.png"
+    },
+    {
+      "Id": "C:\\UVML\\sistem-e-daftar-gemaputera\\wwwroot\\images\\sukan-icons\\badminton.jpg",
+      "PackagePath": "staticwebassets\\images\\sukan-icons\\badminton.jpg"
+    },
+    {
+      "Id": "C:\\UVML\\sistem-e-daftar-gemaputera\\wwwroot\\images\\sukan-icons\\bolajaring.jpg",
+      "PackagePath": "staticwebassets\\images\\sukan-icons\\bolajaring.jpg"
+    },
+    {
+      "Id": "C:\\UVML\\sistem-e-daftar-gemaputera\\wwwroot\\images\\sukan-icons\\futsal.jpg",
+      "PackagePath": "staticwebassets\\images\\sukan-icons\\futsal.jpg"
+    },
+    {
+      "Id": "C:\\UVML\\sistem-e-daftar-gemaputera\\wwwroot\\images\\sukan-icons\\karom.jpg",
+      "PackagePath": "staticwebassets\\images\\sukan-icons\\karom.jpg"
+    },
+    {
+      "Id": "C:\\UVML\\sistem-e-daftar-gemaputera\\wwwroot\\images\\sukan-icons\\pingpong.jpg",
+      "PackagePath": "staticwebassets\\images\\sukan-icons\\pingpong.jpg"
     },
     {
       "Id": "C:\\UVML\\sistem-e-daftar-gemaputera\\wwwroot\\js\\site.js",
@@ -259,6 +275,46 @@
     {
       "Id": "C:\\UVML\\sistem-e-daftar-gemaputera\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
+    },
+    {
+      "Id": "C:\\UVML\\sistem-e-daftar-gemaputera\\wwwroot\\uploads\\17\\20210427_134429.jpg",
+      "PackagePath": "staticwebassets\\uploads\\17\\20210427_134429.jpg"
+    },
+    {
+      "Id": "C:\\UVML\\sistem-e-daftar-gemaputera\\wwwroot\\uploads\\17\\Jivan R.jpg",
+      "PackagePath": "staticwebassets\\uploads\\17\\Jivan R.jpg"
+    },
+    {
+      "Id": "C:\\UVML\\sistem-e-daftar-gemaputera\\wwwroot\\uploads\\19\\20210427_134429.jpg",
+      "PackagePath": "staticwebassets\\uploads\\19\\20210427_134429.jpg"
+    },
+    {
+      "Id": "C:\\UVML\\sistem-e-daftar-gemaputera\\wwwroot\\uploads\\19\\20210427_134521.jpg",
+      "PackagePath": "staticwebassets\\uploads\\19\\20210427_134521.jpg"
+    },
+    {
+      "Id": "C:\\UVML\\sistem-e-daftar-gemaputera\\wwwroot\\uploads\\21\\20210427_134429.jpg",
+      "PackagePath": "staticwebassets\\uploads\\21\\20210427_134429.jpg"
+    },
+    {
+      "Id": "C:\\UVML\\sistem-e-daftar-gemaputera\\wwwroot\\uploads\\21\\20210427_134521.jpg",
+      "PackagePath": "staticwebassets\\uploads\\21\\20210427_134521.jpg"
+    },
+    {
+      "Id": "C:\\UVML\\sistem-e-daftar-gemaputera\\wwwroot\\uploads\\21\\Jivan R.jpg",
+      "PackagePath": "staticwebassets\\uploads\\21\\Jivan R.jpg"
+    },
+    {
+      "Id": "C:\\UVML\\sistem-e-daftar-gemaputera\\wwwroot\\uploads\\21\\WIN_20231226_20_57_28_Pro.jpg",
+      "PackagePath": "staticwebassets\\uploads\\21\\WIN_20231226_20_57_28_Pro.jpg"
+    },
+    {
+      "Id": "C:\\UVML\\sistem-e-daftar-gemaputera\\wwwroot\\uploads\\22\\20210427_134429.jpg",
+      "PackagePath": "staticwebassets\\uploads\\22\\20210427_134429.jpg"
+    },
+    {
+      "Id": "C:\\UVML\\sistem-e-daftar-gemaputera\\wwwroot\\uploads\\32\\20210427_134521.jpg",
+      "PackagePath": "staticwebassets\\uploads\\32\\20210427_134521.jpg"
     },
     {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.sistem-e-daftar-gemaputera.props",

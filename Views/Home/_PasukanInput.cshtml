@@ -1,0 +1,82 @@
+<table class="table-sm">
+    <tr>
+        <td style="width:15px"><span class="badge bg-primary"> {{index + 1}}</span></td>
+        <td>
+            <input v-model="item.namaPenuh" placeholder="Nama Penuh" class="form-control-sm" :class="{'is-valid' : !IsEmpty(item.namaPenuh)}"/>
+        </td>
+        <td>
+            <input v-model="item.telefon" placeholder="No Telefon" class="form-control-sm" :class="{'is-valid' : !IsEmpty(item.telefon)}"/>
+        </td>
+        <td>
+            <input v-model="item.noKP" placeholder="No KP" class="form-control-sm" :class="{'is-valid' : !IsEmpty(item.noKP)}"/>
+        </td>
+        <td>
+            <input v-model="item.noPekerja" placeholder="No Pekerja" class="form-control-sm" :class="{'is-valid' : !IsEmpty(item.noPekerja)}"/>
+        </td>
+        <td>
+            <input v-model="item.noKWSP" placeholder="No KWSP/KWAP" class="form-control-sm" :class="{'is-valid' : !IsEmpty(item.noKWSP)}"/>
+        </td>
+        <td>
+            <select v-model="item.tarafJawatan" title="Taraf Jawatan"  class="form-control-sm" :class="{'is-valid' : !IsEmpty(item.tarafJawatan)}">
+                <option selected disabled>Taraf Jawatan</option>
+                <option>Tetap</option>
+                <option>Kontrak</option>
+                <option>MyStep</option>
+            </select>
+        </td>
+        <td>
+            <select v-model="item.kumpulanJawatan" title="Kumpulan Jawatan" class="form-control-sm" :class="{'is-valid' : !IsEmpty(item.kumpulanJawatan)}">
+                <option selected disabled>Kumpulan Jawatan</option>
+                <option>Pengurusan Tinggi</option>
+                <option>Pengurus & Professional</option>
+                <option>Sokongan</option>
+            </select>
+        </td>
+        <td>
+            <input v-model="item.gredJawatan" placeholder="Gred Jawatan (eg F41, N41, N19, N48)" class="form-control-sm" :class="{'is-valid' : !IsEmpty(item.gredJawatan)}"/>
+        </td>
+        <td>
+            <select v-model="item.kategoriPermainan" title="Kategori Permainan" class="form-control-sm" :class="{'is-valid' : !IsEmpty(item.kategoriPermainan)}">
+                <option selected disabled>Kategori Permainan</option>
+               <option v-for="List in KategoriList">{{List}}</option>
+            </select>
+        </td>
+    </tr>
+</table>
+
+<span class="small text-secondary" style="margin-left:34px">Lampiran:</span>
+<table class="table-sm">
+    <tr>
+        <td style="width:30px"></td>
+        <td>
+            <button class="btn btn-sm btn-outline-dark btn-upload"
+                :class="{'is-valid' : !IsEmpty(item.fileGambar)}"
+                @@click="openDialog('Gambar Passport', item, 'fileGambar', '.jpg')">Gambar Passport <span
+                    v-if="item.fileGambar" class="fa-solid fa-check"></span></button>
+        </td>
+        <td>
+            <button class="btn btn-sm btn-outline-dark btn-upload"
+            :class="{'is-valid' : !IsEmpty(item.fileKP)}"
+                @@click="openDialog('Kad Pengenalan', item, 'fileKP', '.jpg')">Kad Pengenalan <span v-if="item.fileKP"
+                    class="fa-solid fa-check"></span></button>
+        </td>
+        <td>
+            <button class="btn btn-sm btn-outline-dark btn-upload"
+                :class="{'is-valid' : !IsEmpty(item.fileKWSP)}"
+                @@click="openDialog('KWSP/KWAP Majikan', item, 'fileKWSP', '.pdf,.jpg')">KWSP/KWAP Majikan <span
+                    v-if="item.fileKWSP" class="fa-solid fa-check"></span></button>
+        </td>
+        <td>
+            <button class="btn btn-sm btn-outline-dark btn-upload"
+                :class="{'is-valid' : !IsEmpty(item.fileMajikan)}"
+                @@click="openDialog('Surat Pengesahan Majikan', item, 'fileMajikan', '.pdf,.jpg')">Pengesahan Majikan
+                <span v-if="item.fileMajikan" class="fa-solid fa-check"></span></button>
+        </td>
+        <td>
+            <button class="btn btn-sm btn-outline-dark btn-upload"
+                :class="{'is-valid' : !IsEmpty(item.fileSuratLantikan)}"
+                @@click="openDialog('Surat Lantikan Pengarah & SSM', item, 'fileSuratLantikan', '.pdf,.jpg')">Surat
+                Pengarah & SSM <span v-if="item.fileSuratLantikan" class="fa-solid fa-check"></span></button>
+        </td>
+    </tr>
+</table>

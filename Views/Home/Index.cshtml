@@ -1,35 +1,203 @@
-﻿@{
+﻿@model IEnumerable<dynamic>
+@{
     ViewData["Title"] = "Home Page";
+
 }
 
-<div class="row mb-3">
-    <div class="col">
+<div id="app">
+    <div class="row mb-3">
+        <div class="col">
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home"
+                        type="button" role="tab" aria-controls="nav-home" aria-selected="true">@ViewBag.Agensi</button>
 
-    </div>
-    <div class="col-auto">        
-        <a class="btn btn-outline-primary btn-sm" asp-action="Pasukan">Tambah Pasukan</a>
-    </div>
-</div>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                    <div class="p-2">
+                        <div class="border rounded p-2 mb-3 mt-3">
+                            <div class="row">
+                                <div class="col-4">
+                                    <p class="small text-primary"><span class="fa-solid fa-chevron-down"></span> Jumlah Bayaran </p>
+                                    <div class="border rounded p-3">
+                                        <h1>RM @ViewBag.TotalFee</h1>
+                                        <div v-if="Resit">
+                                            <a :href="'/uploads/@ViewBag.Agensi/' + Resit" target="_blank" class="text-dark">Lihat Resit</a>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="col">
 
-<div class="row mb-3">
-    <div class="col">
+                                </div>
+                                <div class="col">
+                                    <p class="small"><strong>Perakaun</strong>: Saya mengesahkan bahawa
+                                        segala
+                                        maklumat yang dinyatakan adalah benar seperti dalam borang
+                                        pendaftaran</p>
 
-        <nav>
-            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Senarai Pasukan</button>
-                <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Bayaran</button>                
+                                    <div class="row mt-2">
+                                        <div class="col">
+                                            <input type="file" class="form-control-sm" accept=".pdf,.jpg"
+                                                @@change="handleFileChange()">
+                                        </div>
+                                        <div class="col-auto">
+                                            <button class="btn btn-outline-dark btn-sm" @@click="uploadResit()">Muat Naik Resit</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="border rounded p-2">
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <p class="small text-primary"><span class="fa-solid fa-chevron-down"></span> Senarai Pendaftaran</p>
+                                </div>
+                                <div class="col-auto">
+                                    <a class="btn btn-primary btn-sm" asp-action="Pasukan">Kemaskini Pasukan</a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="table-responsive">
+                                        <table class="table table-sm">
+                                            <tr>
+                                                <th></th>
+                                                <th>Sukan</th>
+                                                <th>Yuran Pendaftaran</th>
+                                                <th><span class="fa-solid fa-user-tie text-secondary small"></span>
+                                                    Pengurus
+                                                </th>
+                                                <th><span
+                                                        class="fa-solid fa-person-chalkboard text-secondary small"></span>
+                                                    Jurulatih
+                                                </th>
+                                                <th> <span class="fa-solid fa-user-doctor text-secondary small"></span>
+                                                    Fisio
+                                                </th>
+                                                <th><span class="fa-solid fa-people-group text-secondary small"></span>
+                                                    Bil
+                                                    Pemain
+                                                    Lengkap
+                                                </th>
+                                                <th>
+                                                    </td>
+                                            </tr>
+                                            @foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <img class="img-sm rounded-circle"
+                                                            src='@Url.Content("~/images/sukan-icons/" + item.Sukan + ".jpg")' />
+                                                    </td>
+                                                    <td class="align-middle">@item.Sukan</td>
+                                                    <td class="align-middle">RM @item.Fee.ToString("#,00.00")</td>
+                                                    <td class="align-middle">@item.Pengurus</td>
+                                                    <td class="align-middle">
+                                                        @if (string.IsNullOrEmpty(item.Jurulatih))
+                                                        {
+                                                            <span class="badge bg-danger">Sila Isi</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            @item.Jurulatih
+                                                        }
+                                                    </td>
+                                                    <td class="align-middle">
+                                                        @if (string.IsNullOrEmpty(item.Fisio))
+                                                        {
+                                                            <span class="badge bg-danger">Sila Isi</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            @item.Fisio
+                                                        }
+                                                    </td>
+                                                    <td class="align-middle">@item.Lengkap / @item.Bilangan</td>
+                                                    <td></td>
+                                                </tr>
+                                            }
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
             </div>
-        </nav>
-        <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                
-            </div>
-            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-                ...
-            </div>
-            
         </div>
-
-
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                Resit: null, 
+                TempResit: null,               
+            },
+            computed: {
+
+            },
+            mounted() {
+                this.getResit();
+            },
+            methods: {
+                handleFileChange() {
+                    app.TempResit = event.target.files[0];
+                },
+
+                getResit: function() {
+                    $.ajax({
+                        url: 'getResit',
+                        type: 'GET',
+                        success: function (data) {
+                            if (data.status == true) {
+                                app.Resit = data.resit;
+                            }
+                            else {
+                                app.Resit = null;
+                            }
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
+                    });
+                },
+
+                uploadResit: function () {
+
+                    var formData = new FormData();
+                    formData.append('file', app.TempResit);
+
+                    $.ajax({
+                        url: 'uploadResit',
+                        type: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            if (data.status == true) {
+                                toastr.success('Resit berjaya dimuat naik');
+                                app.getResit();
+                            }
+                            else {
+                                toastr.error('Fail gagal dimuat naik');
+                            }
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
+                    });
+                },
+            },
+        })
+    </script>
+}

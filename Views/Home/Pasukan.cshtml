@@ -4,82 +4,100 @@
         <div class="col">
         </div>
         <div class="col-auto">
-
-            <select class="form-control-sm" v-model="selectedSukan" @@change="getData()">
-                <option disabled selected>Senarai Sukan</option>
-                @foreach (var item in ViewBag.SenaraiSukan)
-                {
-                    <option>@item</option>
-                }
-            </select>
-
-            <button class="btn btn-primary btn-sm" @@click="simpan()" >Simpan</button>
+                    <span class="fa-solid fa-chevron-right"></span>
+                    <select class="form-control-sm" style="width: 200px;" v-model="selectedSukan" @@change="getData()">
+                        <option disabled selected>Pilih Sukan</option>
+                        @foreach (var item in ViewBag.SenaraiSukan)
+                        {
+                            <option>@item</option>
+                        }
+                    </select>
+                    <button class="btn btn-outline-primary btn-sm" @@click="simpan()">Simpan</button>
+                    &nbsp;
+                    &nbsp;
+                    <a href="/Home/Index" class="btn btn-outline-secondary btn-sm"><span
+                            class="fa-solid fa-arrow-left" title="Kembali"></span></a>
+                    <button class="btn btn-outline-danger btn-sm" @@click="padam()"><span
+                            class="fa-solid fa-trash" title="Padam"></span></button>
 
         </div>
     </div>
 
+    <p class="small">Semua adalah wajib kecuali lampiran "Surat Pengarah & SSM"</p>
     <div class="card mb-3">
         <div class="card-header">
-            Pengurus
+            <span class="fa-solid fa-user-tie"></span> <span class="text-primary">Pengurus</span>
         </div>
         <div class="card-body">
             <div class="row mb-1" v-for="(item, index) in getPengurus">
                 <div class="col">
                     <div class="table-responsive">
 
-                        <table class="table-sm">
-                            <tr>
-                                <td style="width:15px"><span class="badge bg-primary"> {{index + 1}}</span></td>
-                                <td>
-                                    <input v-model="item.namaPenuh" placeholder="Nama Penuh" class="form-control-sm">
-                                </td>
-                                <td>
-                                    <input v-model="item.telefon" placeholder="No Telefon" class="form-control-sm">
-                                </td>
-                                <td>
-                                    <input v-model="item.noKP" placeholder="No KP" class="form-control-sm">
-                                </td>
-                                <td>
-                                    <input v-model="item.noPekerja" placeholder="No Pekerja" class="form-control-sm">
-                                </td>
-                                <td>
-                                    <input v-model="item.noKWSP" placeholder="No KWSP/KWAP" class="form-control-sm">
-                                </td>
-                                <td>
-                                    <input v-model="item.tarafJawatan" placeholder="Taraf Jawatan" class="form-control-sm">
-                                </td>
-                                <td>
-                                    <input v-model="item.kumpulanJawatan" placeholder="Kumpulan Jawatan" class="form-control-sm">
-                                </td>
-                                <td>
-                                    <input v-model="item.kategoriPermainan" placeholder="Kategori Jawatan" class="form-control-sm">
-                                </td>
-                                <td>
-                                    <input v-model="item.gredJawatan" placeholder="Gred Jawatan" class="form-control-sm">
-                                </td>
-                            </tr>                            
+                        @* <table class="table-sm">
+                        <tr>
+                        <td style="width:15px"><span class="badge bg-primary"> {{index + 1}}</span></td>
+                        <td>
+                        <input v-model="item.namaPenuh" placeholder="Nama Penuh" class="form-control-sm">
+                        </td>
+                        <td>
+                        <input v-model="item.telefon" placeholder="No Telefon" class="form-control-sm">
+                        </td>
+                        <td>
+                        <input v-model="item.noKP" placeholder="No KP" class="form-control-sm">
+                        </td>
+                        <td>
+                        <input v-model="item.noPekerja" placeholder="No Pekerja" class="form-control-sm">
+                        </td>
+                        <td>
+                        <input v-model="item.noKWSP" placeholder="No KWSP/KWAP" class="form-control-sm">
+                        </td>
+                        <td>
+                        <input v-model="item.tarafJawatan" placeholder="Taraf Jawatan" class="form-control-sm">
+                        </td>
+                        <td>
+                        <input v-model="item.kumpulanJawatan" placeholder="Kumpulan Jawatan" class="form-control-sm">
+                        </td>
+                        <td>
+                        <input v-model="item.kategoriPermainan" placeholder="Kategori Jawatan" class="form-control-sm">
+                        </td>
+                        <td>
+                        <input v-model="item.gredJawatan" placeholder="Gred Jawatan" class="form-control-sm">
+                        </td>
+                        </tr>
                         </table>
                         <span class="small text-secondary" style="margin-left:34px">Lampiran:</span>
                         <table>
-                            <tr> 
-                                <td style="width:34px"></td>                               
-                                <td>
-                                    <button class="btn btn-sm btn-outline-dark" @@click="openDialog('Gambar Passport', item, 'fileGambar', '.jpg')">Gambar Passport <span v-if="item.fileGambar" class="fa-solid fa-check"></span></button>
-                                </td>
-                                <td>
-                                    <button class="btn btn-sm btn-outline-dark" @@click="openDialog('Kad Pengenalan', item, 'fileKP', '.jpg')">Kad Pengenalan <span v-if="item.fileKP" class="fa-solid fa-check"></span></button>
-                                </td>
-                                <td>
-                                    <button class="btn btn-sm btn-outline-dark" @@click="openDialog('KWSP/KWAP Majikan', item, 'fileKWSP', '.pdf,.jpg')">KWSP/KWAP Majikan <span v-if="item.fileKWSP" class="fa-solid fa-check"></span></button>
-                                </td>
-                                <td>
-                                    <button class="btn btn-sm btn-outline-dark" @@click="openDialog('Surat Pengesahan Majikan', item, 'fileMajikan', '.pdf,.jpg')">Pengesahan Majikan <span v-if="item.fileMajikan" class="fa-solid fa-check"></span></button>
-                                </td>
-                                <td>
-                                    <button class="btn btn-sm btn-outline-dark" @@click="openDialog('Surat Lantikan Pengarah & SSM', item, 'fileSuratPerlantikan', '.pdf,.jpg')">Lembaga Pengarah & SSM <span v-if="item.fileSuratLantikan" class="fa-solid fa-check"></span></button>
-                                </td>
-                            </tr>
-                        </table>
+                        <tr>
+                        <td style="width:34px"></td>
+                        <td>
+                        <button class="btn btn-sm btn-outline-dark" @@click="openDialog('Gambar Passport', item,
+                        'fileGambar', '.jpg')">Gambar Passport <span v-if="item.fileGambar" class="fa-solid
+                        fa-check"></span></button>
+                        </td>
+                        <td>
+                        <button class="btn btn-sm btn-outline-dark" @@click="openDialog('Kad Pengenalan', item,
+                        'fileKP', '.jpg')">Kad Pengenalan <span v-if="item.fileKP" class="fa-solid
+                        fa-check"></span></button>
+                        </td>
+                        <td>
+                        <button class="btn btn-sm btn-outline-dark" @@click="openDialog('KWSP/KWAP Majikan', item,
+                        'fileKWSP', '.pdf,.jpg')">KWSP/KWAP Majikan <span v-if="item.fileKWSP" class="fa-solid
+                        fa-check"></span></button>
+                        </td>
+                        <td>
+                        <button class="btn btn-sm btn-outline-dark" @@click="openDialog('Surat Pengesahan Majikan',
+                        item, 'fileMajikan', '.pdf,.jpg')">Pengesahan Majikan <span v-if="item.fileMajikan"
+                        class="fa-solid fa-check"></span></button>
+                        </td>
+                        <td>
+                        <button class="btn btn-sm btn-outline-dark" @@click="openDialog('Surat Lantikan Pengarah & SSM',
+                        item, 'fileSuratPerlantikan', '.pdf,.jpg')">Lembaga Pengarah & SSM <span
+                        v-if="item.fileSuratLantikan" class="fa-solid fa-check"></span></button>
+                        </td>
+                        </tr>
+                        </table> *@
+                        <partial name="_PasukanInput"></partial>
+
                     </div>
                 </div>
             </div>
@@ -88,16 +106,16 @@
 
     <div class="card mb-3">
         <div class="card-header">
-            Jurulatih
+            <span class="fa-solid fa-person-chalkboard"></span> <span class="text-primary">Jurulatih</span>
         </div>
         <div class="card-body">
-            <div class="row" v-for="item in getJurulatih">
+            <div class="row" v-for="(item, index) in getJurulatih">
                 <div class="col">
-                    <table>
-                        <tr>
-                            <td><input></td>
-                        </tr>
-                    </table>
+                    <div class="table-responsive">
+
+                        <partial name="_PasukanInput"></partial>
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -105,16 +123,16 @@
 
     <div class="card mb-3">
         <div class="card-header">
-            Fisio
+            <span class="fa-solid fa-user-doctor"></span> <span class="text-primary">Fisio</span>
         </div>
         <div class="card-body">
-            <div class="row" v-for="item in getFisio">
+            <div class="row" v-for="(item, index) in getFisio">
                 <div class="col">
-                    <table>
-                        <tr>
-                            <td><input></td>
-                        </tr>
-                    </table>
+                    <div class="table-responsive">
+
+                        <partial name="_PasukanInput"></partial>
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -122,16 +140,16 @@
 
     <div class="card">
         <div class="card-header">
-            Pemain
+            <span class="fa-solid fa-people-group"></span> <span class="text-primary">Pemain</span>
         </div>
         <div class="card-body">
-            <div class="row" v-for="item in getPemain">
+            <div class="row" v-for="(item, index) in getPemain">
                 <div class="col">
-                    <table>
-                        <tr>
-                            <td><input></td>
-                        </tr>
-                    </table>
+                    <div class="table-responsive">
+
+                        <partial name="_PasukanInput"></partial>
+                        <br>
+                    </div>
                 </div>
             </div>
         </div>
@@ -139,38 +157,40 @@
 
 
 
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">{{selectedUploadDialogHeader}}</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <input type="file" class="form-control" @@change="handleFileChange(selectedUploadDialogRecord)" :accept="selectedUploadDialogExtension">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" @@click="uploadFile()">Upload</button>
-      </div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">{{selectedUploadDialogHeader}}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="file" class="form-control" @@change="handleFileChange(selectedUploadDialogRecord)"
+                        :accept="selectedUploadDialogExtension">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" @@click="uploadFile()">Upload</button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
 </div>
 
 @section Scripts {
-    <script>        
+    <script>
         var app = new Vue({
             el: '#app',
             data: {
-                selectedSukan: "Senarai Sukan",
+                selectedSukan: "Pilih Sukan",
                 record: [],
-                selectedUploadDialogHeader: '',                
+                selectedUploadDialogHeader: '',
                 selectedUploadDialogRecord: '',
                 selectedUploadDialogTarget: '',
                 activeUploadFile: '',
-                selectedUploadDialogExtension: ''
+                selectedUploadDialogExtension: '',
+                KategoriList: []
             },
             computed: {
                 getPengurus: function () {
@@ -196,7 +216,8 @@
                         type: 'GET',
                         data: { jenisSukan: app.selectedSukan },
                         success: function (data) {
-                            app.record = data;                            
+                            app.record = data.pasukan;
+                            app.KategoriList = data.kategori;
                         },
                         error: function (error) {
                             app.record = [];
@@ -220,25 +241,23 @@
                         type: 'POST',
                         data: { data: app.record },
                         success: function (data) {
-                            
-                            if(data.status == true)
-                            {
+
+                            if (data.status == true) {
                                 console.log('masuk');
                                 toastr.success('Data berjaya disimpan');
                             }
-                            else
-                            {
+                            else {
                                 toastr.error('Data gagal disimpan');
                             }
                         },
                         error: function (error) {
                             toastr.error('Data gagal disimpan');
                         }
-                    });                    
+                    });
                 },
 
                 handleFileChange(index) {
-                    app.activeUploadFile = event.target.files[0];                    
+                    app.activeUploadFile = event.target.files[0];
                 },
 
                 uploadFile: function () {
@@ -257,15 +276,52 @@
                         contentType: false,
                         processData: false,
                         success: function (data) {
-                            console.log(data);
+                            if (data.status == true) {
+                                toastr.warning('Jangan lupa klik butang "simpan" di atas, untuk menyimpan perubahan yang dibuat');
+                                $('#exampleModal').modal('hide');
+                            }
+                            else {
+                                toastr.error('Fail gagal dimuat naik');
+
+                            }
                         },
                         error: function (error) {
                             console.log(error);
                         }
                     });
+                },
+
+                IsEmpty: function (value) {
+                    if (value == null || value == undefined || value == '') {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                },
+
+                padam: function () {
+                    if (confirm('Adakah anda pasti untuk memadam kesemua rekod untuk sukan ini?')) {
+
+                        $.ajax({
+                            url: 'padamPasukan',
+                            type: 'POST',
+                            data: { data: app.record },
+                            success: function (data) {
+                                if (data.status == true) {
+                                    toastr.success('Data berjaya dipadam');
+                                    app.getData();
+                                }
+                                else {
+                                    toastr.error('Data gagal dipadam');
+                                }
+                            },
+                            error: function (error) {
+                                toastr.error('Data gagal dipadam');
+                            }
+                        });
+                    }
                 }
-
-
             },
         })
     </script>

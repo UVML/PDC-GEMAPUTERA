@@ -1,0 +1,15 @@
+.img-sm {
+  width: 50px;
+  height: 50px;
+}
+
+.is-valid {
+  border-color: limegreen !important;
+  border-style: solid !important;
+  border-width: 2px;
+
+}
+
+.btn-upload {
+  width: 179px !important;
+}

@@ -27,6 +27,14 @@ public class Sukan
         }
     
     }
+
+    [NotMapped]
+    public string[] KategoryAsList{
+        get
+        {
+            return Kategori.Split(',').Select(x=>x.Trim()).ToArray();
+        }
+    }
 }
 
 

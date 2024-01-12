@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace sistem_e_daftar_gemaputera.Models;
 
@@ -23,5 +24,35 @@ public class Ahli
     public string? FileSuratLantikan { get; set; }
     public string? Telefon { get; set; }
     public string? GredJawatan { get; set; }
+
+    [NotMapped]
+    public bool IsCompleted
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(NamaPenuh) == false &&
+                string.IsNullOrEmpty(NoKP) == false &&
+                string.IsNullOrEmpty(NoPekerja) == false &&
+                string.IsNullOrEmpty(NoKWSP) == false &&
+                string.IsNullOrEmpty(TarafJawatan) == false &&
+                string.IsNullOrEmpty(KumpulanJawatan) == false &&
+                string.IsNullOrEmpty(KategoriPermainan) == false &&
+                string.IsNullOrEmpty(FileGambar) == false &&
+                string.IsNullOrEmpty(FileKP) == false &&
+                string.IsNullOrEmpty(FileKWSP) == false &&
+                string.IsNullOrEmpty(FileMajikan) == false &&                
+                string.IsNullOrEmpty(Telefon) == false &&
+                string.IsNullOrEmpty(GredJawatan) == false
+            )
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+
 }
 
