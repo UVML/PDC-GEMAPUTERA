@@ -13,6 +13,7 @@ using sistem_e_daftar_gemaputera.Models;
 
 namespace sistem_e_daftar_gemaputera.Controllers;
 
+[Authorize]
 public class HomeController : Controller
 {
     private readonly ApplicationDbContext _Db;
@@ -120,7 +121,7 @@ public class HomeController : Controller
 
     #region Manage (CRUD) Pasukan - Pasukan View
 
-    [Authorize]
+    
     public async Task<IActionResult> Pasukan()
     {
         ViewBag.SenaraiSukan = await _Db.Sukan.AsNoTracking().Select(x => x.Nama).ToListAsync();

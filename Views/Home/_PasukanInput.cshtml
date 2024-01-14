@@ -17,29 +17,32 @@
             <input v-model="item.noKWSP" placeholder="No KWSP/KWAP" class="form-control-sm" :class="{'is-valid' : !IsEmpty(item.noKWSP)}"/>
         </td>
         <td>
-            <select v-model="item.tarafJawatan" title="Taraf Jawatan"  class="form-control-sm taraf-jawatan" :class="{'is-valid' : !IsEmpty(item.tarafJawatan)}">
+            @* <select v-model="item.tarafJawatan" title="Taraf Jawatan"  class="form-control-sm taraf-jawatan" :class="{'is-valid' : !IsEmpty(item.tarafJawatan)}">
                 <option selected disabled>Taraf Jawatan</option>
                 <option>Tetap</option>
                 <option>Kontrak</option>
                 <option>MyStep</option>
-            </select> 
-            
+            </select>  *@
+
+            <input v-model="item.tarafJawatan" placeholder="Taraf Jawatan" class="form-control-sm" :class="{'is-valid' : !IsEmpty(item.tarafJawatan)}" @@focus="openChoiceDialog(['Tetap','Kontrak','MyStep'], item, 'tarafJawatan', false)"/>
         </td>
         <td>
-            <select v-model="item.kumpulanJawatan" title="Kumpulan Jawatan" class="form-control-sm" :class="{'is-valid' : !IsEmpty(item.kumpulanJawatan)}">
+            @* <select v-model="item.kumpulanJawatan" title="Kumpulan Jawatan" class="form-control-sm" :class="{'is-valid' : !IsEmpty(item.kumpulanJawatan)}">
                 <option selected disabled>Kumpulan Jawatan</option>
                 <option>Pengurusan Tinggi</option>
                 <option>Pengurus & Professional</option>
                 <option>Sokongan</option>
-            </select>
+            </select> *@
+            <input v-model="item.kumpulanJawatan" placeholder="Kumpulan Jawatan" class="form-control-sm" :class="{'is-valid' : !IsEmpty(item.kumpulanJawatan)}" @@focus="openChoiceDialog(['Pengurusan Tinggi','Pengurus & Professional','Sokongan'], item, 'kumpulanJawatan', false)"/>
         </td>
         <td>
             <input v-model="item.gredJawatan" placeholder="Gred Jawatan (eg F41, N41, N19, N48)" class="form-control-sm" :class="{'is-valid' : !IsEmpty(item.gredJawatan)}"/>
         </td>
         <td>
-            <select v-model="item.kategoriPermainan" title="Kategori Permainan" class="form-control-sm" :class="{'is-valid' : !IsEmpty(item.kategoriPermainan)}">
-                <option v-for="List in KategoriList">{{List}}</option>
-            </select>           
+            @* <select v-model="item.kategoriPermainan" title="Kategori Permainan" class="form-control-sm" :class="{'is-valid' : !IsEmpty(item.kategoriPermainan)}">
+                <option v-for="List in selectionKategoriPermainan">{{List}}</option>
+            </select>*@
+            <input v-model="item.kategoriPermainan" placeholder="Kategori Permainan" class="form-control-sm" :class="{'is-valid' : !IsEmpty(item.kategoriPermainan)}" @@focus="openChoiceDialog(selectionKategoriPermainan, item, 'kategoriPermainan', true)"/>
         </td>
     </tr>
 </table>

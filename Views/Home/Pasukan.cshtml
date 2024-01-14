@@ -1,7 +1,7 @@
 <div id="app">
 
     <div class="row mb-3">
-        <div class="col">            
+        <div class="col">
         </div>
         <div class="col-auto">
 
@@ -164,16 +164,16 @@
     </div>
 
 
-
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!--  Upload Dialog -->
+    <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">{{selectedUploadDialogHeader}}</h5>
+                    <h5 class="modal-title" id="uploadModalLabel">{{selectedUploadDialogHeader}}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <input type="file" class="form-control" @@change="handleFileChange(selectedUploadDialogRecord)"
+                    <input type="file" class="form-control" @@change="handleFileChange(selectedRecord)"
                         :accept="selectedUploadDialogExtension">
                 </div>
                 <div class="modal-footer">
@@ -183,27 +183,65 @@
             </div>
         </div>
     </div>
+    <!-- Upload Dialog -->
+
+    <!--  Upload Dialog -->
+    <div class="modal fade" id="choiceModal" tabindex="-1" aria-labelledby="choiceModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="choiceModalLabel">Pilih</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div v-if="IsSelectionMultiple">
+                        <div v-for="item in selection">
+                            <input type="checkbox" :id="item" :value="item" v-model="selectedSelection">
+                            <label :for="item">{{item}}</label>
+                        </div>
+                    </div>
+                    <div v-else>
+                        <div v-for="item in selection">
+                            <input type="radio" :id="item" :value="item" v-model="selectedSelection">
+                            <label :for="item">{{item}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary btn-sm"
+                        @@click="closeChoiceDialog()">Terima</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Upload Dialog -->
+
+
 
 </div>
 
 @section Scripts {
     <script>
- 
+
+
+
         var app = new Vue({
             el: '#app',
             data: {
-                selectedSukan: "Pilih Sukan",
                 record: [],
-                selectedUploadDialogHeader: '',
-                selectedUploadDialogRecord: '',
-                selectedUploadDialogTarget: '',
                 activeUploadFile: '',
+                selectedUploadDialogHeader: '',
+                selectedSukan: 'Pilih Sukan',
+                selectedRecord: {},
+                selectedColumn: '',
                 selectedUploadDialogExtension: '',
-                KategoriList: [],
-                test:''
+                selectionKategoriPermainan: [],
+                selection: [],
+                selectedSelection: [],
+                IsSelectionMultiple: false
             },
             mounted() {
-                
+
             },
             computed: {
                 getPengurus: function () {
@@ -230,12 +268,7 @@
                         data: { jenisSukan: app.selectedSukan },
                         success: function (data) {
                             app.record = data.pasukan;
-                            app.KategoriList = data.kategori;
-                            
-                            $('.taraf-jawatan').select2({
-                                placeholder: 'Pilih Taraf Jawatan',
-                                allowClear: true
-                            });
+                            app.selectionKategoriPermainan = data.kategori;
                         },
                         error: function (error) {
                             app.record = [];
@@ -246,22 +279,21 @@
 
                 openDialog: function (headerText, record, target, extension) {
                     app.selectedUploadDialogHeader = headerText;
-                    app.selectedUploadDialogRecord = record;
-                    app.selectedUploadDialogTarget = target;
+                    app.selectedRecord = record;
+                    app.selectedColumn = target;
                     app.selectedUploadDialogExtension = extension;
 
-                    $('#exampleModal').modal('show');
+                    $('#uploadModal').modal('show');
                 },
 
                 simpan: function () {
+
                     $.ajax({
                         url: 'setPasukan',
                         type: 'POST',
                         data: { data: app.record },
                         success: function (data) {
-
                             if (data.status == true) {
-                                console.log('masuk');
                                 toastr.success('Data berjaya disimpan');
                             }
                             else {
@@ -280,12 +312,12 @@
 
                 uploadFile: function () {
 
-                    app.selectedUploadDialogRecord[app.selectedUploadDialogTarget] = app.activeUploadFile.name;
-                    console.log(app.selectedUploadDialogRecord);
+                    app.selectedRecord[app.selectedColumn] = app.activeUploadFile.name;
+                    console.log(app.selectedRecord);
 
                     var formData = new FormData();
                     formData.append('file', app.activeUploadFile);
-                    formData.append('data', JSON.stringify(app.selectedUploadDialogRecord));
+                    formData.append('data', JSON.stringify(app.selectedRecord));
 
                     $.ajax({
                         url: 'uploadFile',
@@ -296,7 +328,7 @@
                         success: function (data) {
                             if (data.status == true) {
                                 toastr.warning('Jangan lupa klik butang "simpan" di atas, untuk menyimpan perubahan yang dibuat');
-                                $('#exampleModal').modal('hide');
+                                $('#uploadModal').modal('hide');
                             }
                             else {
                                 toastr.error('Fail gagal dimuat naik');
@@ -339,12 +371,32 @@
                             }
                         });
                     }
+                },
+
+                openChoiceDialog: function (choiceList, record, target, isMultiple) {
+                    app.IsSelectionMultiple = isMultiple;
+                    app.selectedRecord = record;
+                    app.selectedColumn = target;
+                    app.selection = choiceList;
+
+                    if (app.selectedRecord[app.selectedColumn] == null || app.selectedRecord[app.selectedColumn] == undefined || app.selectedRecord[app.selectedColumn] == '')
+                        app.selectedSelection = [];
+                    else
+                        app.selectedSelection = isMultiple ? app.selectedRecord[app.selectedColumn].split(',') : app.selectedRecord[app.selectedColumn];
+
+                    $('#choiceModal').modal('show');
+                },
+
+                closeChoiceDialog: function () {
+
+                    app.selectedRecord[app.selectedColumn] = Array.isArray(app.selectedSelection) ? app.selectedSelection.join(',') : app.selectedSelection;
+                    $('#choiceModal').modal('hide');
                 }
             },
         });
-    
-        
-	
-        
+
+
+
+
     </script>
 }

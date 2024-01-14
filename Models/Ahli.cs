@@ -25,6 +25,8 @@ public class Ahli
     public string? Telefon { get; set; }
     public string? GredJawatan { get; set; }
 
+    
+
     [NotMapped]
     public bool IsCompleted
     {
