@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\buildMultiTargeting\sistem-e-daftar-gemaputera.props" />
-</Project>
