@@ -16,4 +16,6 @@ public class ApplicationDbContext : DbContext
     public DbSet<Ahli> Ahli {get; set;}
     
     public DbSet<Sukan> Sukan {get; set;}
+
+    public DbSet<Setting> Setting {get; set;}
 }

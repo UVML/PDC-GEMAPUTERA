@@ -15,6 +15,17 @@ CREATE TABLE [Pengguna] (
 )
 GO
 
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Pengguna] ON [dbo].[Pengguna]
+(
+	[Emel] ASC
+)
+GO
+
+INSERT INTO Pengguna VALUES('Administrator', 'Administrator', 'Administrator','Administrator','','')
+GO
+
+
+
 CREATE TABLE [Agensi] (
 	Nama varchar(100) Primary Key
 )
@@ -77,3 +88,16 @@ INSERT INTO Sukan VALUES('Karom', 1000, 'A, B, C', 'Pengurus=1, Jurulatih=1, Fis
 INSERT INTO Sukan VALUES('Golf', 1000, 'A, B, C', 'Pengurus=1, Jurulatih=1, Fisio=0, Pemain=10')
 
 Go
+
+
+CREATE TABLE Setting (
+	[Key] varchar(100) Primary Key,
+	[Value] varchar(max)
+)
+GO
+
+INSERT INTO Setting VALUES('Pasukan', '{TarikTamat:"1/May/2024"}')
+INSERT INTO Setting VALUES('Bank', '{Nama:"Maybank", NoAkaun:"1234567890"}')
+INSERT INTO Setting VALUES('SMTP', '{Server:"", Port:0, Username:"", Password:"", SSL:false}');
+GO
+

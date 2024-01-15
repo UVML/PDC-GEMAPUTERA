@@ -26,7 +26,7 @@ public class HomeController : Controller
         _Configuration = configuration;     
     }
     
-    #region Main Page - Index View
+    
 
     [Authorize]
     public async Task<IActionResult> Index()
@@ -55,8 +55,8 @@ public class HomeController : Controller
         ViewBag.TotalFee = _model.Sum(x => x.Fee).ToString("#,##0.00");
         ViewBag.Agensi = _agensi;
         
-        ViewBag.BankName    = _Configuration.GetSection("Payment").GetValue<string>("BankName");
-        ViewBag.BankAccount = _Configuration.GetSection("Payment").GetValue<string>("BankAccount");
+
+        ViewBag.Bank = JsonConvert.DeserializeObject(_Db.Setting.AsNoTracking().Where(x => x.Key == "Bank").Select(x => x.Value).Single());
 
         return View(_model);
     }
@@ -116,102 +116,22 @@ public class HomeController : Controller
     }
 
 
-    #endregion
-
-
-    #region Manage (CRUD) Pasukan - Pasukan View
-
-    
-    public async Task<IActionResult> Pasukan()
+    public async Task<IActionResult> TukarKataLaluan(string KataLaluanLama, string KataLaluanBaru)
     {
-        ViewBag.SenaraiSukan = await _Db.Sukan.AsNoTracking().Select(x => x.Nama).ToListAsync();
-        return View();
-    }
+        var _result = false;
+        var _user   = await _Db.Pengguna.Where(x => x.Emel == User.Identity.Name).SingleAsync();
 
-    public async Task<IActionResult> GetPasukan(string jenisSukan)
-    {
-        var _agensi = User.Claims.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value).Single();
-
-        var _ListOfAhli = await _Db.Ahli.AsNoTracking().Where(x => x.JenisSukan == jenisSukan && x.Agensi == _agensi).ToListAsync();
-        var _Configuration = await _Db.Sukan.AsNoTracking().Where(x => x.Nama == jenisSukan).FirstAsync();
-
-        var _model = new List<Ahli>();
-        _model.AddRange(_ListOfAhli);
-
-        foreach (var _config in _Configuration.KonfigurasiAhli)
+        if (_user.KataLaluan == KataLaluanLama)        
         {
-            var _recordSize = _ListOfAhli.Count(x => x.JenisAhli == _config.JenisAhli);
-            if (_config.Size != _recordSize)
-            {
-                for (int i = 0; i < _config.Size - _ListOfAhli.Count(x => x.JenisAhli == _config.JenisAhli); i++)
-                {
-                    _model.Add(new Ahli { JenisAhli = _config.JenisAhli, JenisSukan = jenisSukan, Agensi = _agensi });
-                }
-            }
+            _user.KataLaluan = KataLaluanBaru;
+            await _Db.SaveChangesAsync();     
+            
+            _result = true;       
         }
 
-        return Json(new { pasukan = _model, kategori = _Configuration.KategoryAsList });
-
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> SetPasukan(List<Ahli> data)
-    {
-        _Db.UpdateRange(data);
-        await _Db.SaveChangesAsync();
-
-        return new JsonResult(new { status = true });
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> PadamPasukan(List<Ahli> data)
-    {
-        try
-        {
-            _Db.RemoveRange(data);
-            await _Db.SaveChangesAsync();
-
-            return new JsonResult(new { status = true });
-        }
-        catch
-        {
-            return new JsonResult(new { status = false });
-        }
+        return Json(new { status = _result });
     }
 
 
-    [HttpPost]
-    public async Task<IActionResult> UploadFile(IFormFile file, [FromForm] string data)
-    {
-
-        try
-        {
-            var _ahli = JsonConvert.DeserializeObject<Ahli>(data);
-
-            var _folder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", _ahli.Id.ToString());
-
-            if (!Directory.Exists(_folder))
-            {
-                Directory.CreateDirectory(_folder);
-            }
-
-            var _filePath = Path.Combine(_folder, file.FileName);
-
-            using (var stream = new FileStream(_filePath, FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
-            }
-
-            return new JsonResult(new { status = true });
-        }
-        catch
-        {
-            return new JsonResult(new { status = false });
-        }
-
-
-    }
-
-    #endregion
-
+   
 }

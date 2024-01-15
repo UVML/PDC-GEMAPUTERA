@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "Home Page";
 
-    
+
 
 }
 
@@ -11,7 +11,7 @@
         <div class="col">
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <button class="nav-link active text-primary" id="nav-home-tab" data-bs-toggle="tab"
+                    <button class="nav-link active text-dark" id="nav-home-tab" data-bs-toggle="tab"
                         data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
                         aria-selected="true">@ViewBag.Agensi</button>
 
@@ -26,17 +26,21 @@
                                 <div class="col-3">
                                     <div class="p-3">
                                         <h3>RM @ViewBag.TotalFee</h3>
-                                        <p class="small text-secondary">Selepas pendaftaran pasukan sudah lengkap dan muktamat,
+                                        <p class="small text-secondary">Selepas pendaftaran pasukan sudah lengkap dan
+                                            muktamat,
                                             sila buat bayaran dan muat naik resit.</p>
-                                        <pre class="small">@ViewBag.BankName<br>@ViewBag.BankAccount</pre>
+                                        <pre class="small">@ViewBag.Bank.Nama<br>@ViewBag.Bank.NoAkaun</pre>
                                     </div>
 
                                 </div>
 
                                 <div class="col-3">
 
-                                    <p class="small text-secondary"><span class="text-dark">Perakaun</span>: Saya
-                                        mengesahkan bahawa, segala maklumat yang didaftarkan dalam sistem ini adalah benar.
+                                    <p class="small text-secondary" style="text-align:justify;">
+                                        <input type="checkbox" v-model="Perakuan" /> <strong
+                                            class="text-dark">Perakaun</strong>: Saya
+                                        mengesahkan bahawa, segala maklumat yang didaftarkan dalam sistem ini adalah
+                                        lengkap dan benar.
                                     </p>
 
                                     <div class="row mt-2">
@@ -45,7 +49,8 @@
                                                 @@change="handleFileChange()">
                                         </div>
                                         <div class="col-auto">
-                                            <button class="btn btn-outline-dark btn" @@click="uploadResit()">Muat
+                                            <button class="btn btn-outline-dark btn" :disabled="!Perakuan"
+                                                @@click="uploadResit()">Muat
                                                 Naik</button>
                                         </div>
                                     </div>
@@ -67,13 +72,14 @@
                                         Pendaftaran</p>
                                 </div>
                                 <div class="col-auto">
-                                    <a class="btn btn-primary" asp-action="Pasukan">Kemaskini Pasukan</a>
+                                    <a class="btn btn-primary" asp-action="Index" asp-controller="Pasukan">Kemaskini
+                                        Pasukan</a>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col">
                                     <div class="table-responsive">
-                                       <partial name="_SenaraiSukan" model="@Model" />
+                                        <partial name="_SenaraiSukan" model="@Model" />
                                     </div>
                                 </div>
                             </div>
@@ -85,6 +91,37 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="TukarKataLaluanModal" tabindex="-1" aria-labelledby="TukarKataLaluanModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="TukarKataLaluanModalLabel">Tukar Kata Laluan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group mb-3">
+                        <input type="password" class="form-control" v-model="KataLaluanLama" placeholder="Kata Laluan Lama">
+                    </div>
+                    <div class="form-group mb-2">
+                        <input type="password" class="form-control" v-model="KataLaluanBaru" placeholder="Kata Laluan Baru">
+                    </div>
+                    <div class="form-group mb-2">                        
+                        <input type="password" class="form-control" v-model="KataLaluanConfirm" placeholder="Kata Laluan Baru">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm" 
+                        :disabled="(KataLaluanLama=='' || KataLaluanBaru=='') || KataLaluanBaru != KataLaluanConfirm"
+                        @@click="tukarKataLaluan()"
+                    >Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 @section Scripts {
@@ -94,6 +131,10 @@
             data: {
                 Resit: null,
                 TempResit: null,
+                Perakuan: false,
+                KataLaluanLama: '',
+                KataLaluanBaru: '',
+                KataLaluanConfirm: '',
             },
             computed: {
 
@@ -130,7 +171,7 @@
                     formData.append('file', app.TempResit);
 
                     $.ajax({
-                        url: 'uploadResit',
+                        url: '@Url.Content("~/Home/UploadResit")',
                         type: 'POST',
                         data: formData,
                         contentType: false,
@@ -149,7 +190,36 @@
                         }
                     });
                 },
+
+                tukarKataLaluan: function () {
+                    $.ajax({
+                        url: '@Url.Content("/Home/TukarKataLaluan")',
+                        type: 'POST',
+                        data: {
+                            KataLaluanLama: app.KataLaluanLama,
+                            KataLaluanBaru: app.KataLaluanBaru
+                        },
+                        success: function (data) {
+                            if (data.status == true) {
+                                toastr.success('Kata laluan berjaya ditukar');
+                                $('#TukarKataLaluanModal').modal('hide');
+                            }
+                            else {
+                                toastr.error('Kata laluan gagal ditukar. Pastikan kata laluan lama betul');
+                            }
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
+                    });
+                },
+
+                showTukarKataLaluan: function () {
+                    $('#TukarKataLaluanModal').modal('show');
+                }
+                
             },
+
         })
     </script>
 }

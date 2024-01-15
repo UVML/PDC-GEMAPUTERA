@@ -99,7 +99,7 @@
                         </td>
                         </tr>
                         </table> *@
-                        <partial name="_PasukanInput"></partial>
+                        <partial name="_Editable"></partial>
 
                     </div>
                 </div>
@@ -118,7 +118,7 @@
                 <div class="col">
                     <div class="table-responsive">
 
-                        <partial name="_PasukanInput"></partial>
+                        <partial name="_Editable"></partial>
 
                     </div>
                 </div>
@@ -137,7 +137,7 @@
                 <div class="col">
                     <div class="table-responsive">
 
-                        <partial name="_PasukanInput"></partial>
+                        <partial name="_Editable"></partial>
 
                     </div>
                 </div>
@@ -155,7 +155,7 @@
                 <div class="col">
                     <div class="table-responsive">
 
-                        <partial name="_PasukanInput"></partial>
+                        <partial name="_Editable"></partial>
                         <br>
                     </div>
                 </div>
@@ -185,7 +185,7 @@
     </div>
     <!-- Upload Dialog -->
 
-    <!--  Upload Dialog -->
+    <!--  Dropdown Selection Dialog -->
     <div class="modal fade" id="choiceModal" tabindex="-1" aria-labelledby="choiceModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -214,7 +214,7 @@
             </div>
         </div>
     </div>
-    <!-- Upload Dialog -->
+    <!-- Dropdown Selection Dialog -->
 
 
 
@@ -263,7 +263,7 @@
             methods: {
                 getData: function () {
                     $.ajax({
-                        url: 'getPasukan',
+                        url: '@Url.Content("~/Pasukan/GetPasukan")',
                         type: 'GET',
                         data: { jenisSukan: app.selectedSukan },
                         success: function (data) {
@@ -289,7 +289,7 @@
                 simpan: function () {
 
                     $.ajax({
-                        url: 'setPasukan',
+                        url: '@Url.Content("~/Pasukan/SetPasukan")',
                         type: 'POST',
                         data: { data: app.record },
                         success: function (data) {
@@ -320,7 +320,7 @@
                     formData.append('data', JSON.stringify(app.selectedRecord));
 
                     $.ajax({
-                        url: 'uploadFile',
+                        url: '@Url.Content("~/Pasukan/UploadFile")',
                         type: 'POST',
                         data: formData,
                         contentType: false,
@@ -354,7 +354,7 @@
                     if (confirm('Adakah anda pasti untuk memadam kesemua rekod untuk sukan ini?')) {
 
                         $.ajax({
-                            url: 'padamPasukan',
+                            url: '@Url.Content("~/Pasukan/DelPasukan")',
                             type: 'POST',
                             data: { data: app.record },
                             success: function (data) {

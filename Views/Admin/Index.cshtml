@@ -1,4 +1,4 @@
-@model IEnumerable<dynamic>
+@model IEnumerable<Ahli>
 
 <div id="app">
 
@@ -16,39 +16,106 @@
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
 
-                    <div class= "p-2 mt-3">
-                    @foreach (var Agensi in ViewBag.Agencies)
-                    {
-                        <div class="border rounded p-2 mb-3">
-                            <div class="row mb-3">
-                                <div class="col">
-                                    <p class="text-primary"><span class="fa-solid fa-chevron-down"></span> @Agensi.Name</p>
-                                </div>
-                                <div class="col-auto">
-                                    <a class="btn btn-outline-dark btn-sm" asp-action="Pasukan">Lihat Pasukan</a>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-8">
-                                    <div class="table-responsive">
-                                        <partial name="~/Views/Home/_SenaraiSukan.cshtml"
-                                            model="@Model.Where(x=>x.Agensi==Agensi.Name)" />
+                    <div class="p-2 mt-3">
+                        @foreach (var Agensi in ViewBag.Agencies)
+                        {
+                            var _ListOfSukan = Model.Where(x => x.Agensi == Agensi.Name).ToList();
+                            var _DistinctSukan = _ListOfSukan.Select(x => x.JenisSukan).Distinct().ToList();
+
+                            <div class="border border-secondary  rounded p-2 mb-3">
+                                <div class="row mb-3">
+                                    <div class="col">
+                                       <h6 class="text-primary"> <span class="fa-solid fa-chevron-down"></span> @Agensi.Name (@Agensi.Fee.ToString("#,#00.00"))</h6>
+                                    </div>
+                                    <div class="col-auto">
+                                        
                                     </div>
                                 </div>
-                                <div class="col">
-                                    @if (Agensi.File != null && Agensi.File.Split('.')[1] == "pdf")
-                                    {                                        
-                                        <embed src="~/uploads/@Agensi.Name/@Agensi.File" width="100%" height="90%" />
-                                    }
-                                    else
-                                    {
-                                        <img src="~/uploads/@Agensi.Name/@Agensi.File" style="max-height: 100%; max-width: 100%; display:block;">
-                                    }
+                                <div class="row mb-2">
+                                    <div class="col-8">
+                                        @foreach (var Sukan in _DistinctSukan)
+                                        {
+                                            var JenisSukan = Sukan.Replace(" ", "");
+
+                                            <div class="accordion accordion-flush" id="accordionFlushExample">
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header" id="flush-@JenisSukan">
+                                                        <button class="accordion-button collapsed" type="button"
+                                                            data-bs-toggle="collapse"
+                                                            data-bs-target="#flush-collapse-@JenisSukan" aria-expanded="false"
+                                                            aria-controls="flush-collapse-@JenisSukan">
+                                                            @Sukan
+                                                        </button>
+                                                    </h2>
+
+                                                    <div id="flush-collapse-@JenisSukan" class="accordion-collapse collapse"
+                                                        aria-labelledby="flush-@JenisSukan"
+                                                        data-bs-parent="#accordionFlushExample">
+                                                        <div class="accordion-body">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-sm" style="font-size:9pt">
+                                                                    <tr>
+                                                                        <td></td>
+                                                                        <td>Nama Penuh</td>
+                                                                        <td>No KP</td>
+                                                                        <td>No Pekerja</td>
+                                                                        <td>No KWSP</td>
+                                                                        <td>Taraf J.</td>
+                                                                        <td>Kumpulan J.</td>
+                                                                        <td>Gred J.</td>
+                                                                        <td>Kategori Pemain</td>
+                                                                        <td>Gambar</td>
+                                                                        <td>KP</td>
+                                                                        <td>KWSP</td>
+                                                                        <td>Majikan</td>
+                                                                        <td>Pengarah / SSM</td>
+                                                                    </tr>
+                                                                    @foreach(var Ahli in _ListOfSukan.Where(x => x.JenisSukan == Sukan))
+                                                                    {
+                                                                        <tr>
+                                                                            <td>@Ahli.JenisAhli</td>
+                                                                            <td>@Ahli.NamaPenuh</td>
+                                                                            <td>@Ahli.NoKP</td>
+                                                                            <td>@Ahli.NoPekerja</td>
+                                                                            <td>@Ahli.NoKWSP</td>
+                                                                            <td>@Ahli.TarafJawatan</td>
+                                                                            <td>@Ahli.KumpulanJawatan</td>
+                                                                            <td>@Ahli.GredJawatan</td>
+                                                                            <td>@Ahli.KategoriPermainan</td>
+                                                                            <td><a target="_blank" href="~/uploads/@Ahli.Id/@Ahli.FileGambar">@Ahli.FileGambar</a></td>
+                                                                            <td><a target="_blank" href="~/uploads/@Ahli.Id/@Ahli.FileKP">@Ahli.FileKP</a></td>
+                                                                            <td><a target="_blank" href="~/uploads/@Ahli.Id/@Ahli.FileKWSP">@Ahli.FileKWSP</a></td>
+                                                                            <td><a target="_blank" href="~/uploads/@Ahli.Id/@Ahli.FileMajikan">@Ahli.FileMajikan</a></td>
+                                                                            <td><a target="_blank" href="~/uploads/@Ahli.Id/@Ahli.FileSuratLantikan">@Ahli.FileSuratLantikan</a></td>
+                                                                        </tr>
+                                                                    }
+                                                                
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="col">
+                                        <!-- PREVIEW RECEIPT IN PDF OR JPEG -->
+                                        @if (Agensi.File != null && Agensi.File.Split('.')[1] == "pdf")
+                                        {
+                                            <embed src="~/uploads/@Agensi.Name/@Agensi.File" width="100%" height="90%" />                                            
+                                        }
+                                        else
+                                        {
+                                            <img src="~/uploads/@Agensi.Name/@Agensi.File" style="max-height: 100%; max-width: 100%; display:block;">
+                                        }
+                                        
+                                        <a class="small text-secondary" target="_blank"  href="~/uploads/@Agensi.Name/@Agensi.File">Buka Lampiran Resit</a>
+
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                    }
+                        }
                     </div>
                 </div>
             </div>

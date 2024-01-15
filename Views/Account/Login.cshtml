@@ -1,7 +1,7 @@
 @{
     Layout = null;
 }
-
+@page
 @model sistem_e_daftar_gemaputera.Models.Pengguna
 
 <!DOCTYPE html>
@@ -15,147 +15,173 @@
 
     <style>
         body {
-            margin: 0;
-            padding: 0;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
             justify-content: center;
             align-items: center;
             height: 100vh;
             display: flex;
-            transition: 1s ease;
         }
     </style>
 </head>
 
+
+
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col">
-            </div>
-            <div class="col-auto">
-                <div class="card" style="background-color: rgba(255, 255, 255, 0.8); width:400px">
-                    <div class="card-header text-center">
-                        <h3 class="text-primary">Sistem Pendaftaran</h2>
-                    </div>
-                    <div class="card-body">
-                        <nav>
-                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Masuk</button>
-                                <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Daftar Baru</button>
-                            </div>
-                        </nav>
-                        <div class="tab-content p-2" id="nav-tabContent">
-                            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                                <div class="text-center">
-                                    <div class="row">
-                                        <div class="col">
-                                            <h4>KEJOHANAN SUKAN GEMAPUTERA PULAU PINANG
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col">
-                                            <img src="~/images/gemaputeraxvi.png" height="150px" />
-                                        </div>
-                                    </div>
+    <div id="app">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col">
+                </div>
+                <div class="col-auto">
+                    <div class="card" style="background-color: rgba(255, 255, 255, 0.8); width:400px">
+                        <div class="card-header text-center">
+                            <h3 class="text-primary">Sistem Pendaftaran</h2>
+                        </div>
+                        <div class="card-body">
+                            <nav>
+                                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                    <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab"
+                                        data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
+                                        aria-selected="true">Masuk</button>
+                                    <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab"
+                                        data-bs-target="#nav-profile" type="button" role="tab"
+                                        aria-controls="nav-profile" aria-selected="false">Daftar Baru</button>
                                 </div>
-
-                                <form action="Login" method="post" class="mb-3">
-                                    <div class="mb-3">
-                                        <input type="text" id="email" name="email" class="form-control"
-                                            placeholder="Emel Pengguna" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <input type="password" id="password" name="password" class="form-control"
-                                            placeholder="Kata Laluan" required>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary form-control">Log Masuk</button>
-                                </form>
-
-                                <a href="" class="small">Lupa Kata Laluan</a>
-                            </div>
-                            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-
-                                <p class="text-center small">Daftar Sebagai Sekretariat Kontinjen</p>
-
-                                <form action="Register" method="post" class="mb-3">
-                                    <div class="mb-3">
-                                        <select asp-for="Agensi" class="form-control" required onchange="OnDaftar_Check()">
-                                            <option value="0" disabled selected>Pilih Nama Agensi</option>
-                                            @foreach(var Agency in ViewBag.Agencies)
-                                            {
-                                                <option>@Agency</option>
-                                            }
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <input asp-for="Emel" type="text" class="form-control" placeholder="Emel Pengguna" required pattern="[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
-                                    </div>
-                                    <div class="mb-3">
-                                        <input asp-for="NamaPenuh" class="form-control" placeholder="Nama Penuh" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <input asp-for="Jawatan" class="form-control" placeholder="Jawatan" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <input asp-for="Telefon" class="form-control" placeholder="No Telephone (HP)" required pattern="[0]{3}[-]?[0]{6,8}">
-                                    </div>
-                                    
-                                    <div class="mb-3">
-                                        <input asp-for="KataLaluan" type="password" class="form-control" placeholder="Kata Laluan" onkeyup="OnDaftar_Check()" required>
+                            </nav>
+                            <div class="tab-content p-2" id="nav-tabContent">
+                                <div class="tab-pane fade show active" id="nav-home" role="tabpanel"
+                                    aria-labelledby="nav-home-tab">
+                                    <div class="text-center">
+                                        <div class="row">
+                                            <div class="col">
+                                                <h4>KEJOHANAN SUKAN GEMAPUTERA PULAU PINANG
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col">
+                                                <img src="~/images/gemaputeraxvi.png" height="150px" />
+                                            </div>
+                                        </div>
                                     </div>
 
-                                    <div class="mb-3">
-                                        <input Id="KataLaluan2" type="password"  class="form-control" placeholder="Pengesahan Kata Laluan" onkeyup="OnDaftar_Check()">
-                                    </div>
-                                    <button id="Daftar" type="submit" class="btn btn-primary form-control">Daftar</button>                                   
-                                </form>
+                                    <form action="Login" method="post" class="mb-3">
+                                        <div class="mb-3">
+                                            <input type="text" id="email" name="email" class="form-control"
+                                                placeholder="Emel Pengguna" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <input type="password" id="password" name="password" class="form-control"
+                                                placeholder="Kata Laluan" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary form-control">Log Masuk</button>
+                                    </form>
+
+                                    <a href="" class="small">Lupa Kata Laluan</a>
+                                </div>
+                                <div class="tab-pane fade" id="nav-profile" role="tabpanel"
+                                    aria-labelledby="nav-profile-tab">
+
+                                    <p class="text-center small">Daftar Sebagai Sekretariat Kontinjen</p>
+
+                                    <form v-on:submit.prevent="daftar()">
+                                        <div class="mb-3">
+                                            <select asp-for="Agensi" class="form-control" required
+                                                v-model="pengguna.agensi">
+                                                <option value="0" disabled selected>Pilih Nama Agensi</option>
+                                                @foreach (var Agency in ViewBag.Agencies)
+                                                {
+                                                    <option>@Agency</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <input asp-for="Emel" type="text" class="form-control"
+                                                v-model="pengguna.emel" placeholder="Emel Pengguna" required
+                                                pattern="[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <input asp-for="NamaPenuh" class="form-control" placeholder="Nama Penuh"
+                                                v-model="pengguna.namaPenuh" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <input asp-for="Jawatan" class="form-control" placeholder="Jawatan" required
+                                                v-model="pengguna.jawatan">
+                                        </div>
+                                        <div class="mb-3">
+                                            <input asp-for="Telefon" class="form-control"
+                                                placeholder="No Telephone (HP)" v-model="pengguna.telefon" required
+                                                pattern="[0]{3}[-]?[0]{6,8}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <input asp-for="KataLaluan" type="password" class="form-control"
+                                                v-model="pengguna.kataLaluan" placeholder="Kata Laluan" required>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <input Id="KataLaluan2" type="password" class="form-control"
+                                                v-model="kataLaluanConfirm" placeholder="Pengesahan Kata Laluan">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary form-control">Daftar</button>
+                                    </form>
+
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
+        </div>
     </div>
+
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
     <script>
-        var images = [
-            '/images/bg01.jpg',
-            '/images/bg02.jpg',
-            '/images/bg03.jpg',
-            // Add more image paths as needed
-        ];
 
-        var index = 0;
+        var app = new Vue({
+            el: '#app',
+            data: {
+                pengguna: { agensi: "", emel: "", namaPenuh: "", jawatan: "", telefon: "", kataLaluan: "" },
+                kataLaluanConfirm: ""
+            },
 
-        function changeBackground() {
-            document.body.style.backgroundImage = 'url(' + images[index] + ')';
-            index = (index + 1) % images.length; // Loop through the images
-            setTimeout(changeBackground, 3000); // Change background every 3 seconds
-        }
+            mounted() {
+            },
 
-        function OnDaftar_Check() {
-        
-            var criteria1 = $("#KataLaluan").val() == $("#KataLaluan2").val();
-            var criteria2 = $("#Agensi").val() != null;
-            console.log("1",criteria1)
-            console.log("2",criteria2)
-            $("#Daftar").prop("disabled", !(criteria1 && criteria2));
-            
-        }
-        
+            methods: {
 
-        $(document).ready(function () {
-            changeBackground();
-            $("#Daftar").prop("disabled", true);
+                daftar() {
+                    console.log("daftar");
+
+                    $.ajax({
+                        url: '@Url.Content("~/Account/Daftar")',
+                        type: "POST",
+                        data: JSON.stringify(app.pengguna),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (response) {
+                            console.log(response);
+                            if (response.success) {
+                                alert("Pendaftaran Berjaya");
+
+                            }
+                            else {
+                                alert("Pendaftaran Gagal");
+                            }
+                        },
+                        error: function (response) {
+                            console.log(response);
+                            alert("Pendaftaran Gagal");
+                        }
+                    });
+                }
+            }
         });
 
-      
     </script>
 </body>
+
 
 </html>

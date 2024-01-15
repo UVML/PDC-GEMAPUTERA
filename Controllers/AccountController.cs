@@ -87,4 +87,20 @@ public class AccountController : Controller
 
     }
 
+    [HttpPost]
+    public async Task<IActionResult> Daftar(Pengguna pengguna)
+    {
+        try
+        {
+            await _Db.AddAsync(pengguna);
+            await _Db.SaveChangesAsync();
+
+            return new JsonResult(new { status = true });
+        }
+        catch
+        {
+            return new JsonResult(new { status = false });
+        }
+    }
+
 }
