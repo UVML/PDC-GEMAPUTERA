@@ -18,4 +18,6 @@ public class ApplicationDbContext : DbContext
     public DbSet<Sukan> Sukan {get; set;}
 
     public DbSet<Setting> Setting {get; set;}
+
+    public DbSet<Logger> Logger {get; set;}
 }

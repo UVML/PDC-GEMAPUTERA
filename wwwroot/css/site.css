@@ -13,6 +13,13 @@
 
 }
 
+.is-not-valid {
+  border-color: red !important;
+  border-style: solid !important;
+  border-width: 2px;
+
+}
+
 .btn-upload {
   width: 179px !important;
 }
@@ -24,4 +31,12 @@
 .form-control-sm {
   border-width: thin !important;
   border-style: solid !important;
+}
+
+@media print
+{    
+    .no-print, .no-print *
+    {
+        display: none !important;
+    }
 }

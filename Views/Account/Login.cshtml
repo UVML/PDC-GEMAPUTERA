@@ -1,7 +1,7 @@
 @{
     Layout = null;
 }
-@page
+
 @model sistem_e_daftar_gemaputera.Models.Pengguna
 
 <!DOCTYPE html>
@@ -12,9 +12,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistem Pendaftaran</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
+        integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="~/css/site.css" />
 
     <style>
         body {
+            background-color:  #6495ED;
             justify-content: center;
             align-items: center;
             height: 100vh;
@@ -53,12 +58,12 @@
                                     <div class="text-center">
                                         <div class="row">
                                             <div class="col">
-                                                <h4>KEJOHANAN SUKAN GEMAPUTERA PULAU PINANG
+                                                @* <h4>KEJOHANAN SUKAN GEMAPUTERA PULAU PINANG</h4> *@
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <div class="col">
-                                                <img src="~/images/gemaputeraxvi.png" height="150px" />
+                                                <img src="~/images/gemaputera.png" width="350px"  />
                                             </div>
                                         </div>
                                     </div>
@@ -66,7 +71,7 @@
                                     <form action="Login" method="post" class="mb-3">
                                         <div class="mb-3">
                                             <input type="text" id="email" name="email" class="form-control"
-                                                placeholder="Emel Pengguna" required>
+                                                placeholder="Emel Pengguna" required ref="EmelPengguna">
                                         </div>
                                         <div class="mb-3">
                                             <input type="password" id="password" name="password" class="form-control"
@@ -75,7 +80,10 @@
                                         <button type="submit" class="btn btn-primary form-control">Log Masuk</button>
                                     </form>
 
-                                    <a href="" class="small">Lupa Kata Laluan</a>
+                                    <a href="#" @@click.prevent="forgotPassword" class="small">Lupa Kata Laluan</a>
+                                    <div v-if="IsWait" class="spinner-border spinner-border-sm" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
                                 </div>
                                 <div class="tab-pane fade" id="nav-profile" role="tabpanel"
                                     aria-labelledby="nav-profile-tab">
@@ -94,9 +102,8 @@
                                             </select>
                                         </div>
                                         <div class="mb-3">
-                                            <input asp-for="Emel" type="text" class="form-control"
-                                                v-model="pengguna.emel" placeholder="Emel Pengguna" required
-                                                pattern="[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
+                                            <input asp-for="Emel" type="email" class="form-control"
+                                                v-model="pengguna.emel" placeholder="Emel Pengguna" required>
                                         </div>
                                         <div class="mb-3">
                                             <input asp-for="NamaPenuh" class="form-control" placeholder="Nama Penuh"
@@ -107,9 +114,9 @@
                                                 v-model="pengguna.jawatan">
                                         </div>
                                         <div class="mb-3">
-                                            <input asp-for="Telefon" class="form-control"
-                                                placeholder="No Telephone (HP)" v-model="pengguna.telefon" required
-                                                pattern="[0]{3}[-]?[0]{6,8}">
+                                            <input asp-for="Telefon" type="tel" class="form-control"
+                                                placeholder="No Telephone (HP)" v-model="pengguna.telefon"
+                                                required="required" pattern="[0-9-]+" minlength="9" maxlength="11">
                                         </div>
                                         <div class="mb-3">
                                             <input asp-for="KataLaluan" type="password" class="form-control"
@@ -120,7 +127,8 @@
                                             <input Id="KataLaluan2" type="password" class="form-control"
                                                 v-model="kataLaluanConfirm" placeholder="Pengesahan Kata Laluan">
                                         </div>
-                                        <button type="submit" class="btn btn-primary form-control">Daftar</button>
+                                        <button type="submit" class="btn btn-primary form-control"
+                                            :disabled="pengguna.kataLaluan !=  kataLaluanConfirm">Daftar</button>
                                     </form>
 
                                 </div>
@@ -137,14 +145,16 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     <script>
 
         var app = new Vue({
             el: '#app',
             data: {
-                pengguna: { agensi: "", emel: "", namaPenuh: "", jawatan: "", telefon: "", kataLaluan: "" },
-                kataLaluanConfirm: ""
+                pengguna: { agensi: "0", emel: "", namaPenuh: "", jawatan: "", telefon: "", kataLaluan: "" },
+                kataLaluanConfirm: "",
+                IsWait: false
             },
 
             mounted() {
@@ -158,24 +168,56 @@
                     $.ajax({
                         url: '@Url.Content("~/Account/Daftar")',
                         type: "POST",
-                        data: JSON.stringify(app.pengguna),
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
+                        data: app.pengguna,
                         success: function (response) {
-                            console.log(response);
-                            if (response.success) {
+                            if (response.status == true) {
                                 alert("Pendaftaran Berjaya");
-
+                                window.location.href = '@Url.Content("~/Account/Login")';
                             }
                             else {
-                                alert("Pendaftaran Gagal");
+                                alert("Pendaftaran gagal, pastikan emel belum didaftarkan.");
                             }
                         },
                         error: function (response) {
-                            console.log(response);
                             alert("Pendaftaran Gagal");
                         }
                     });
+                },
+
+                forgotPassword() {
+                    var ele = this.$refs.EmelPengguna;
+
+                    if (ele.value == "") {
+
+
+                        const tooltip = new bootstrap.Tooltip(ele, {
+                            title: 'Sila taip emel anda, dan klik semula pautan "Lupa Kata Laluan"',
+                            placement: 'right',
+                            trigger: 'manual',
+                        });
+
+                        tooltip.show();
+                    }
+                    else {
+                        app.IsWait = true;
+
+                        $.ajax({
+                            url: '@Url.Content("~/Account/ForgotPassword")',
+                            type: "POST",
+                            data: { email: ele.value },
+                            success: function (response) {
+                                if (response.status == true) {
+                                    toastr.success("Kata laluan telah dihantar ke emel. Sila semak emel anda.");
+                                }
+                                else {
+                                    toastr.error("Emel gagal dihantar. Pastikan emel anda betul.");
+                                }
+
+                               app.IsWait = false;
+                            }
+                        });
+                    }
+
                 }
             }
         });

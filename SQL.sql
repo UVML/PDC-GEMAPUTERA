@@ -98,6 +98,13 @@ GO
 
 INSERT INTO Setting VALUES('Pasukan', '{TarikTamat:"1/May/2024"}')
 INSERT INTO Setting VALUES('Bank', '{Nama:"Maybank", NoAkaun:"1234567890"}')
-INSERT INTO Setting VALUES('SMTP', '{Server:"", Port:0, Username:"", Password:"", SSL:false}');
+INSERT INTO Setting VALUES('SMTP', '{Host:"", Port:0, Username:"", Password:"", UseSSL:false, From:""}');
 GO
 
+CREATE TABLE Logger (
+	Id int Primary Key Identity,
+	[CreatedAt] datetime,
+	[Message] varchar(max),
+	[Location] varchar(max)
+)
+GO

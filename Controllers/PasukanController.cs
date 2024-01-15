@@ -108,4 +108,16 @@ public class PasukanController : Controller
 
     }
 
+    public async Task<IActionResult> Cetak(string sukan)
+    {
+        var _agensi = User.Claims.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value).Single();
+
+        var _model = await _Db.Ahli.AsNoTracking().Where(x => x.JenisSukan == sukan && x.Agensi == _agensi).ToListAsync();
+
+        ViewBag.TarikhTutup  =  await _Db.Setting.AsNoTracking().Where(x => x.Key == "TarikhTutup").Select(x => x.Value).SingleAsync();
+        
+
+        return View(_model);
+    }
+
 }
