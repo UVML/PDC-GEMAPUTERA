@@ -41,7 +41,7 @@ public class HomeController : Controller
             Fee = _sukan.Where(y => y.Nama == x.Key).Single().Fee,
             Pengurus = x.Where(y => y.JenisAhli == "Pengurus").All(x=>x.IsCompleted),
             Jurulatih = x.Where(y => y.JenisAhli == "Jurulatih").FirstOrDefault()?.IsCompleted,
-            Fisio = _sukan.Where(y => y.Nama == x.Key).Single().KonfigurasiAhli.Single(y => y.JenisAhli == "Fisio").Size > 0 ? x.Where(y => y.JenisAhli == "Fisio").All(z=>z.IsCompleted): true,
+            Fisio = _sukan.Where(y => y.Nama == x.Key).Single().BilanganJenisAhli.Fisio > 0 ? x.Where(y => y.JenisAhli == "Fisio").All(z=>z.IsCompleted): true,
             Pemain = x.Where(y => y.JenisAhli == "Pemain" & y.IsCompleted).Count(),
             Bilangan = x.Where(y => y.JenisAhli == "Pemain").Count(),
 
@@ -52,17 +52,16 @@ public class HomeController : Controller
             Jurulatih_Id = x.Where(y => y.JenisAhli == "Jurulatih").FirstOrDefault()?.Id,
         }).ToList();
 
-        ViewBag.TotalFee = _model.Sum(x => x.Fee).ToString("#,##0.00");
-        ViewBag.Agensi = _agensi;
-        
-
-        ViewBag.Bank = JsonConvert.DeserializeObject(_Db.Setting.AsNoTracking().Where(x => x.Key == "Bank").Select(x => x.Value).Single());
+        ViewBag.TotalFee    = _model.Sum(x => x.Fee).ToString("#,##0.00");
+        ViewBag.Agensi      = _agensi;
+        ViewBag.Bank        = JsonConvert.DeserializeObject(_Db.Setting.AsNoTracking().Where(x => x.Key == "Bank").Select(x => x.Value).Single());
+        ViewBag.TarikhTutup = DateTime.Parse( _Db.Setting.AsNoTracking().Where(x => x.Key == "TarikhTutup").Select(x => x.Value).Single()).ToString("dd/MM/yyyy");
 
         return View(_model);
     }
 
     [HttpPost]
-    public async Task<IActionResult> UploadResit(IFormFile file)
+    public async Task<IActionResult> UploadYuran(IFormFile file)
     {
 
         try
@@ -77,37 +76,38 @@ public class HomeController : Controller
             }
 
             var _filePath = Path.Combine(_folder, file.FileName);
+            
+            var _pengguna = await _Db.Pengguna.SingleAsync(x => x.Agensi == _agensi);
+            _pengguna.FileYuran = file.FileName;
+            _pengguna.TarikhHantar = DateTime.Now;
+            await _Db.SaveChangesAsync();
+
 
             using (var stream = new FileStream(_filePath, FileMode.Create))
             {
                 await file.CopyToAsync(stream);
             }
+            
+            
 
             return new JsonResult(new { status = true });
         }
         catch
-        {
+        {            
             return new JsonResult(new { status = false });
         }
 
 
     }
 
-    public async Task<IActionResult> GetResit()
+    public async Task<IActionResult> GetAttachment()
     {
         try
         {
-            var _agensi = User.Claims.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value).Single();
-            var _folder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", _agensi);
+            var _agensi   = User.Claims.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value).Single();
+            var _pengguna = await _Db.Pengguna.AsNoTracking().Where(x => x.Agensi == _agensi).SingleAsync();
 
-            if (!Directory.Exists(_folder))
-            {
-                Directory.CreateDirectory(_folder);
-            }
-
-            var _file = Directory.GetFiles(_folder)[0];
-
-            return Json(new { status = true, resit = Path.GetFileName(_file) });
+            return Json(new { status = true, resit = _pengguna.FileResit, yuran = _pengguna.FileYuran, tarikh = _pengguna.TarikhHantar?.ToString("dd/MM/yyyy") });
         }
         catch
         {

@@ -24,43 +24,38 @@
                             <p class="small text-primary"><span class="fa-solid fa-chevron-down"></span> Bayaran </p>
                             <div class="row">
                                 <div class="col-3">
-                                    <div class="p-3">
-                                        <h3>RM @ViewBag.TotalFee</h3>
-                                        <p class="small text-secondary">Selepas pendaftaran pasukan sudah lengkap dan
-                                            muktamat,
-                                            sila buat bayaran dan muat naik resit.</p>
-                                        <pre class="small">@ViewBag.Bank.Nama<br>@ViewBag.Bank.NoAkaun</pre>
+                                    <div class="p-2">
+                                        <p class="small text-secondary">Jumlah yang perlu dibayar</p>
+                                        <h3 style="text-align:right">RM @ViewBag.TotalFee</h3>
+                                        <button class="btn btn-success form-control" data-bs-toggle="modal"
+                                            data-bs-target="#HantarModal">Hantar Penyertaan</button>
+                                        <span></span>
+
                                     </div>
+                                </div>
+                                <div class="col">
 
                                 </div>
+                                <div class="col-auto">
+                                    <p class="small">
+                                        <span class="fa-solid fa-exclamation-circle text-warning"></span>
+                                         Tarikh Tutup: @ViewBag.TarikhTutup.</p>
 
-                                <div class="col-3">
-
-                                    <p class="small text-secondary" style="text-align:justify;">
-                                        <input type="checkbox" v-model="Perakuan" /> <strong
-                                            class="text-dark">Perakaun</strong>: Saya
-                                        mengesahkan bahawa, segala maklumat yang didaftarkan dalam sistem ini adalah
-                                        lengkap dan benar.
+                                    <p v-if="Attachment.yuran" class="mt-2 small">
+                                        <span class="fa-solid fa-check-circle text-success"></span>
+                                        Penyertaan dihantar pada  {{Attachment.tarikh}}.
+                                        <br/>
+                                        <a :href="'/uploads/@ViewBag.Agensi/' + Attachment.yuran" target="_blank"
+                                            class=""> Lihat Lampiran Yuran</a>
                                     </p>
 
-                                    <div class="row mt-2">
-                                        <div class="col">
-                                            <input type="file" class="form-control" accept=".pdf,.jpg"
-                                                @@change="handleFileChange()">
-                                        </div>
-                                        <div class="col-auto">
-                                            <button class="btn btn-outline-dark btn" :disabled="!Perakuan"
-                                                @@click="uploadResit()">Muat
-                                                Naik</button>
-                                        </div>
-                                    </div>
-
-                                    <div v-if="Resit" class="mt-2 text-danger">
-                                        <span class="fa-solid fa-receipt"></span>
-                                        <a :href="'/uploads/@ViewBag.Agensi/' + Resit" target="_blank"
-                                            class="small">Lihat Resit</a>
-                                    </div>
-
+                                    <p v-if="Attachment.resit" class="mt-2 small">
+                                        <span class="fa-solid fa-check-circle text-success"></span>
+                                        Resit rasmi telah dikeluarkan.
+                                        <br/>
+                                        <a :href="'/uploads/@ViewBag.Agensi/' + Attachment.resit" target="_blank"
+                                            class=""> Lihat Lampiran Resit</a>
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -72,7 +67,8 @@
                                         Pendaftaran</p>
                                 </div>
                                 <div class="col-auto">
-                                    <a class="btn btn-primary" asp-action="Index" asp-controller="Pasukan"><span class="fa-solid fa-pencil"></span> Kemaskini
+                                    <a class="btn btn-primary" asp-action="Index" asp-controller="Pasukan"><span
+                                            class="fa-solid fa-pencil"></span> Kemaskini
                                         Pasukan</a>
                                 </div>
                             </div>
@@ -92,8 +88,9 @@
         </div>
     </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="TukarKataLaluanModal" tabindex="-1" aria-labelledby="TukarKataLaluanModalLabel" aria-hidden="true">
+    <!-- Modal Change Password -->
+    <div class="modal fade" id="TukarKataLaluanModal" tabindex="-1" aria-labelledby="TukarKataLaluanModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -102,25 +99,125 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group mb-3">
-                        <input type="password" class="form-control" v-model="KataLaluanLama" placeholder="Kata Laluan Lama">
+                        <input type="password" class="form-control" v-model="KataLaluanLama"
+                            placeholder="Kata Laluan Lama">
                     </div>
                     <div class="form-group mb-2">
-                        <input type="password" class="form-control" v-model="KataLaluanBaru" placeholder="Kata Laluan Baru">
+                        <input type="password" class="form-control" v-model="KataLaluanBaru"
+                            placeholder="Kata Laluan Baru">
                     </div>
-                    <div class="form-group mb-2">                        
-                        <input type="password" class="form-control" v-model="KataLaluanConfirm" placeholder="Kata Laluan Baru">
+                    <div class="form-group mb-2">
+                        <input type="password" class="form-control" v-model="KataLaluanConfirm"
+                            placeholder="Kata Laluan Baru">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
-                    <button type="button" class="btn btn-outline-primary btn-sm" 
+                    <button type="button" class="btn btn-outline-secondary btn-sm"
+                        data-bs-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm"
                         :disabled="(KataLaluanLama=='' || KataLaluanBaru=='') || KataLaluanBaru != KataLaluanConfirm"
-                        @@click="tukarKataLaluan()"
-                    >Simpan</button>
+                        @@click="tukarKataLaluan()">Simpan</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Modal Hantar/Confirmation -->
+    <div class="modal fade" id="HantarModal" tabindex="-1" aria-labelledby="HantarModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="HantarLabel">Hantar Penyertaan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-2">
+                        <div class="col">
+                            <div class="p-2 border rounded">
+                                <h6 class="text-primary"><span class="fa-solid fa-chevron-down"></span> KAEDAH
+                                    PEMBAYARAN YURAN PENYERTAAN</h6>
+                                <p class="small">Bayaran boleh dibuat secara atas talian melalui kaedah Electronic Fund
+                                    Transfer (EFT).
+                                    Berikut adalah maklumat perbankan kami:</p>
+                                <table class="table table-sm table-borderless small">
+                                    <tr>
+                                        <td>Nama Akaun</td>
+                                        <td>@ViewBag.Bank.NamaAkaun</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Nombor Akaun Bank</td>
+                                        <td>@ViewBag.Bank.NoAkaun</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Bank</td>
+                                        <td>@ViewBag.Bank.NamaBank</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="border rounded p-2">
+                        <div class="row">
+                            <div class="col">
+                                <h6 class="text-danger"><span class="fa-solid fa-chevron-down"></span> RINGKASAN DAN
+                                    PENGESAHAN BAYARAN</h6>
+                                <table class="table table-sm table-borderless small">
+                                    <tr>
+                                        <td>Nama Agensi</td>
+                                        <td>
+                                            <input type="text" class="form-control" readonly value="@ViewBag.Agensi" />
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Amaun (RM)</td>
+                                        <td>
+                                            <input type="text" class="form-control" readonly
+                                                value="@ViewBag.TotalFee" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Catatan</td>
+                                        <td>
+                                            <input type="text" class="form-control">
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p class="small text-secondary" style="text-align:justify; font-size:9pt">
+                                    <input type="checkbox" v-model="Perakuan" />Kami telah membaca dan memahami serta
+                                    akan mematuhi syarat-syarat dan peraturan-peraturan kejohanan yang telah ditetapkan
+                                    oleh
+                                    jawatankuasa penganjur dan mengesahkan bahawa segala maklumat adalah benar seperti
+                                    dalam borang pendaftaran
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <input type="file" class="form-control" accept=".pdf,.jpg"
+                                    @@change="handleFileChange()">
+                            </div>
+                            <div class="col-auto">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary "
+                        data-bs-dismiss="modal">Tutup</button>
+                    <button class="btn btn-success btn" :disabled="!(Perakuan && TempResit)"
+                                    @@click="uploadYuran()">Muat
+                                    Naik</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 </div>
 
@@ -129,7 +226,7 @@
         var app = new Vue({
             el: '#app',
             data: {
-                Resit: null,
+                Attachment: {},
                 TempResit: null,
                 Perakuan: false,
                 KataLaluanLama: '',
@@ -140,20 +237,20 @@
 
             },
             mounted() {
-                this.getResit();
+                this.getAttachment();
             },
             methods: {
                 handleFileChange() {
                     app.TempResit = event.target.files[0];
                 },
 
-                getResit: function () {
+                getAttachment: function () {
                     $.ajax({
-                        url: '/Home/getResit',
+                        url: '@Url.Content("~/Home/getAttachment")',
                         type: 'GET',
                         success: function (data) {
                             if (data.status == true) {
-                                app.Resit = data.resit;
+                                app.Attachment = data;                                
                             }
                             else {
                                 app.Resit = null;
@@ -165,13 +262,13 @@
                     });
                 },
 
-                uploadResit: function () {
+                uploadYuran: function () {
 
                     var formData = new FormData();
                     formData.append('file', app.TempResit);
 
                     $.ajax({
-                        url: '@Url.Content("~/Home/UploadResit")',
+                        url: '@Url.Content("~/Home/UploadYuran")',
                         type: 'POST',
                         data: formData,
                         contentType: false,
@@ -179,7 +276,8 @@
                         success: function (data) {
                             if (data.status == true) {
                                 toastr.success('Resit berjaya dimuat naik');
-                                app.getResit();
+                                $('#HantarModal').modal('hide');
+                                app.getAttachment();
                             }
                             else {
                                 toastr.error('Fail gagal dimuat naik');
@@ -217,7 +315,7 @@
                 showTukarKataLaluan: function () {
                     $('#TukarKataLaluanModal').modal('show');
                 }
-                
+
             },
 
         })

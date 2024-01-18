@@ -53,7 +53,7 @@ public class AccountController : Controller
             var _identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var _principal = new ClaimsPrincipal(_identity);
 
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, _principal);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, _principal, new AuthenticationProperties { IsPersistent = false });
 
             if (email.ToLower() == "administrator")
             {

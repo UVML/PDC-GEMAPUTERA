@@ -27,24 +27,45 @@ public class PasukanController : Controller
 
     public async Task<IActionResult> GetPasukan(string jenisSukan)
     {
-        var _agensi = User.Claims.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value).Single();
-
-        var _ListOfAhli = await _Db.Ahli.AsNoTracking().Where(x => x.JenisSukan == jenisSukan && x.Agensi == _agensi).ToListAsync();
-        var _Configuration = await _Db.Sukan.AsNoTracking().Where(x => x.Nama == jenisSukan).FirstAsync();
+        var _agensi         = User.Claims.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value).Single();
+        var _ListOfAhli     = await _Db.Ahli.AsNoTracking().Where(x => x.JenisSukan == jenisSukan && x.Agensi == _agensi).ToListAsync();
+        var _Configuration  = await _Db.Sukan.AsNoTracking().Where(x => x.Nama == jenisSukan).FirstAsync();
 
         var _model = new List<Ahli>();
-        _model.AddRange(_ListOfAhli);
 
-        foreach (var _config in _Configuration.KonfigurasiAhli)
+        if (_ListOfAhli.Count == 0)
         {
-            var _recordSize = _ListOfAhli.Count(x => x.JenisAhli == _config.JenisAhli);
-            if (_config.Size != _recordSize)
+            //Pengurus
+            for (int i = 0; i < _Configuration.BilanganJenisAhli.Pengurus; i++)
             {
-                for (int i = 0; i < _config.Size - _ListOfAhli.Count(x => x.JenisAhli == _config.JenisAhli); i++)
-                {
-                    _model.Add(new Ahli { JenisAhli = _config.JenisAhli, JenisSukan = jenisSukan, Agensi = _agensi });
-                }
+                _model.Add(new Ahli { JenisAhli = "Pengurus", JenisSukan = jenisSukan, Agensi = _agensi });
             }
+
+             //Jurulatih
+            for (int i = 0; i < _Configuration.BilanganJenisAhli.Jurulatih; i++)
+            {
+                _model.Add(new Ahli { JenisAhli = "Jurulatih", JenisSukan = jenisSukan, Agensi = _agensi });
+            }
+
+             //Fisio
+            for (int i = 0; i < _Configuration.BilanganJenisAhli.Fisio; i++)
+            {
+                _model.Add(new Ahli { JenisAhli = "Fisio", JenisSukan = jenisSukan, Agensi = _agensi });
+            }
+
+            //Pemain
+            for (int i = 0; i < _Configuration.BilanganJenisAhli.Pemain; i++)
+            {
+                _model.Add(new Ahli { JenisAhli = "Pemain", JenisSukan = jenisSukan, Agensi = _agensi });
+            }
+
+            _Db.UpdateRange(_model);
+            
+            await _Db.SaveChangesAsync();
+        }
+        else
+        {
+            _model = _ListOfAhli;
         }
 
         return Json(new { pasukan = _model, kategori = _Configuration.KategoryAsList });
@@ -114,8 +135,8 @@ public class PasukanController : Controller
 
         var _model = await _Db.Ahli.AsNoTracking().Where(x => x.JenisSukan == sukan && x.Agensi == _agensi).ToListAsync();
 
-        ViewBag.TarikhTutup  =  await _Db.Setting.AsNoTracking().Where(x => x.Key == "TarikhTutup").Select(x => x.Value).SingleAsync();
-        
+        ViewBag.TarikhTutup = await _Db.Setting.AsNoTracking().Where(x => x.Key == "TarikhTutup").Select(x => x.Value).SingleAsync();
+
 
         return View(_model);
     }

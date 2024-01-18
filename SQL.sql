@@ -11,7 +11,11 @@ CREATE TABLE [Pengguna] (
 	Emel varchar(100),
 	KataLaluan varchar(100),
 	Telefon varchar(100),
-	Jawatan varchar(100)
+	Jawatan varchar(100),
+	FileYuran varchar(100),
+	FileResit varchar(100),
+	TarikhHantar datetime,
+	TarikhResit datetime
 )
 GO
 
@@ -23,8 +27,6 @@ GO
 
 INSERT INTO Pengguna VALUES('Administrator', 'Administrator', 'Administrator','Administrator','','')
 GO
-
-
 
 CREATE TABLE [Agensi] (
 	Nama varchar(100) Primary Key
@@ -96,7 +98,7 @@ CREATE TABLE Setting (
 )
 GO
 
-INSERT INTO Setting VALUES('Pasukan', '{TarikTamat:"1/May/2024"}')
+INSERT INTO Setting VALUES('TarikhTutup', '1/May/2024')
 INSERT INTO Setting VALUES('Bank', '{Nama:"Maybank", NoAkaun:"1234567890"}')
 INSERT INTO Setting VALUES('SMTP', '{Host:"", Port:0, Username:"", Password:"", UseSSL:false, From:""}');
 GO

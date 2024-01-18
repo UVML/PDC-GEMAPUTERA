@@ -269,6 +269,7 @@
                         success: function (data) {
                             app.record = data.pasukan;
                             app.selectionKategoriPermainan = data.kategori;
+                            console.log(app.record);
                         },
                         error: function (error) {
                             app.record = [];
@@ -360,7 +361,9 @@
                             success: function (data) {
                                 if (data.status == true) {
                                     toastr.success('Data berjaya dipadam');
-                                    app.getData();
+                                    app.record=[];
+                                    app.selectedSukan='Pilih Sukan';
+
                                 }
                                 else {
                                     toastr.error('Data gagal dipadam');
