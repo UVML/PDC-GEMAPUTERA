@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-100">
 
 <head>
     <meta charset="utf-8" />
@@ -18,13 +18,13 @@
 
 </head>
 
-<body>
+<body class="d-flex flex-column h-100">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3 no-print"
             style="background-color: #6495ED;">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <img src="~/images/gemaputera.png" height="50px"> 
+                    <img src="~/images/gemaputera.png" height="50px">
                     <span class="text-light">Sukan Gemaputera Pulau Pinang 2024</span>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
@@ -33,16 +33,17 @@
                 </button>
                 <div class="d-flex">
                     <ul class="navbar-nav flex-grow-1">
-                        
+
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDarkDropdownMenuLink" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDarkDropdownMenuLink"
+                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <span class="fa-solid fa-user-circle"></span> @User.Identity?.Name
                             </a>
                             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
                                 <li><a class="dropdown-item" href="/Account/Logout">Log Keluar</a></li>
-                                <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#TukarKataLaluanModal">Tukar Kata Laluan</button></li>
-                                
+                                <li><button class="dropdown-item" data-bs-toggle="modal"
+                                        data-bs-target="#TukarKataLaluanModal">Tukar Kata Laluan</button></li>
+
                             </ul>
                         </li>
                     </ul>
@@ -51,18 +52,21 @@
             </div>
         </nav>
     </header>
-    <div class="container-fluid">
-        <main role="main" class="pb-3">
+    <main role="main" class="flex-shrink-0">
+        <div class="container-fluid">
             @RenderBody()
-        </main>
-    </div>
+        </div>
+    </main>
 
-    <footer class="footer text-muted">
+    <footer class="footer mt-auto py-3 bg-light">
+        <div class="container text-center">
+            <span class="text-muted small">Copyright &copy; Perbadanan Pembangunan Pulau Pinang - 2024</span>
+        </div>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/fontawesome.min.js"
         integrity="sha512-C8qHv0HOaf4yoA7ISuuCTrsPX8qjolYTZyoFRKNA9dFKnxgzIHnYTOJhXQIt6zwpIFzCrRzUBuVgtC4e5K1nhA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>

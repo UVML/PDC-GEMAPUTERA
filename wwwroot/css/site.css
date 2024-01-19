@@ -40,3 +40,20 @@
         display: none !important;
     }
 }
+
+/* write a captcha class and trasform the angle to random degrees */
+.captcha {
+  transform: rotate(5deg);
+  margin-top: 10px;
+  box-shadow: 5px 5px 5px 5px gray;
+  width: 60px;;
+  padding: 10px;
+  font-weight: 400;
+  
+  user-select: none;
+  text-decoration:line-through;
+  font-style: italic;
+  font-size: x-large;
+  border: red 2px solid;
+  
+}

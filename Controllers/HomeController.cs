@@ -24,6 +24,8 @@ public class HomeController : Controller
     {
         _Db = applicationDbContext;   
         _Configuration = configuration;     
+
+       
     }
     
     
@@ -32,6 +34,12 @@ public class HomeController : Controller
     public async Task<IActionResult> Index()
     {
         var _agensi = User.Claims.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value).Single();
+         
+        if (_agensi == "Administrator")
+        {
+            return RedirectToAction("Index", "Admin");
+        }
+
         var _ahli = await _Db.Ahli.AsNoTracking().Where(x => x.Agensi == _agensi).ToListAsync();
         var _sukan = await _Db.Sukan.AsNoTracking().ToListAsync();
 
@@ -61,7 +69,7 @@ public class HomeController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> UploadYuran(IFormFile file)
+    public async Task<IActionResult> UploadYuran(IFormFile file, string Catatan)
     {
 
         try
@@ -78,8 +86,10 @@ public class HomeController : Controller
             var _filePath = Path.Combine(_folder, file.FileName);
             
             var _pengguna = await _Db.Pengguna.SingleAsync(x => x.Agensi == _agensi);
-            _pengguna.FileYuran = file.FileName;
+            _pengguna.FileYuran    = file.FileName;
             _pengguna.TarikhHantar = DateTime.Now;
+            _pengguna.Catatan      = Catatan;
+
             await _Db.SaveChangesAsync();
 
 
@@ -111,7 +121,7 @@ public class HomeController : Controller
         }
         catch
         {
-            return Json(new { status = false });
+            return Json(new { status = false, resit = "", yuran ="", tarikh = "" });
         }
     }
 

@@ -12,10 +12,11 @@ CREATE TABLE [Pengguna] (
 	KataLaluan varchar(100),
 	Telefon varchar(100),
 	Jawatan varchar(100),
-	FileYuran varchar(100),
-	FileResit varchar(100),
+	FileYuran varchar(max),
+	FileResit varchar(max),
 	TarikhHantar datetime,
-	TarikhResit datetime
+	TarikhResit datetime,
+	Catatan varchar(max)
 )
 GO
 
@@ -101,6 +102,7 @@ GO
 INSERT INTO Setting VALUES('TarikhTutup', '1/May/2024')
 INSERT INTO Setting VALUES('Bank', '{Nama:"Maybank", NoAkaun:"1234567890"}')
 INSERT INTO Setting VALUES('SMTP', '{Host:"", Port:0, Username:"", Password:"", UseSSL:false, From:""}');
+INSERT INTO Setting VALUES('SMS','{Url:"https://mysmsdvsb.azurewebsites.net/api/messages", API:"aLl+dhCGAjfcreG0eFFGjpaFiEkQ+HHIs11J4AQmLQI="}');
 GO
 
 CREATE TABLE Logger (

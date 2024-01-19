@@ -18,3 +18,8 @@ public class Setting_SMTP
     public string From { get; set; }
 }
 
+public class Setting_SMS
+{
+    public string Url { get; set; }
+    public string API { get; set; }
+}

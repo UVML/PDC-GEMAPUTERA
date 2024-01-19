@@ -179,7 +179,7 @@
                                     <tr>
                                         <td>Catatan</td>
                                         <td>
-                                            <input type="text" class="form-control">
+                                            <input type="text" class="form-control" v-model="Catatan">
                                         </td>
                                     </tr>
                                 </table>
@@ -232,6 +232,7 @@
                 KataLaluanLama: '',
                 KataLaluanBaru: '',
                 KataLaluanConfirm: '',
+                Catatan: ''
             },
             computed: {
 
@@ -266,6 +267,7 @@
 
                     var formData = new FormData();
                     formData.append('file', app.TempResit);
+                    formData.append('catatan', app.Catatan);
 
                     $.ajax({
                         url: '@Url.Content("~/Home/UploadYuran")',

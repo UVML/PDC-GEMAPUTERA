@@ -1,20 +1,25 @@
+using System.Net.Http.Headers;
 using System.Security.Claims;
+using System.Text;
 using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Net.Http.Headers;
 using MimeKit;
 using Newtonsoft.Json;
 using sistem_e_daftar_gemaputera.Models;
 
 public class AccountController : Controller
 {
-    private readonly ApplicationDbContext _Db;
+    private readonly ApplicationDbContext _Db;    
+    private readonly IHttpClientFactory _httpClientFactory;
 
-    public AccountController(ApplicationDbContext applicationDbContext)
+    public AccountController(ApplicationDbContext applicationDbContext, IHttpClientFactory httpClientFactory)
     {
-        _Db = applicationDbContext;
+        _Db = applicationDbContext;        
+        _httpClientFactory = httpClientFactory;
     }
 
     private async Task<List<string>> GetAgencies()
@@ -41,6 +46,8 @@ public class AccountController : Controller
     public async Task<ActionResult> Login(string email, string password)
     {
         var _query = await _Db.Pengguna.AsNoTracking().SingleOrDefaultAsync(x => x.Emel == email);
+        var _url = Url.Content("~/Home/Index");
+        var _result = false;
 
         if (_query != null && _query.KataLaluan == password)
         {
@@ -57,19 +64,13 @@ public class AccountController : Controller
 
             if (email.ToLower() == "administrator")
             {
-                return RedirectToAction("Index", "Admin");
-            }
-            else
-            {
-                return RedirectToAction("Index", "Home");
+                _url = Url.Content("~/Admin/Index");
             }
 
+            _result = true;
         }
-        else
-        {
-            ViewBag.Agencies = await GetAgencies();
-            return View();
-        }
+    
+        return new JsonResult(new { status = _result, url = _url });
 
     }
 
@@ -93,20 +94,82 @@ public class AccountController : Controller
     [HttpPost]
     public async Task<IActionResult> Daftar(Pengguna data)
     {
-        try
-        {
-            Console.WriteLine(data.Agensi);
-            await _Db.AddAsync(data);
-            await _Db.SaveChangesAsync();
+        var _result   = false;
+        var _tac_code = HttpContext.Session.GetString("tac_code");
+        var _expiry   = HttpContext.Session.GetString("tac_expiry");
 
-            return new JsonResult(new { status = true });
-        }
-        catch (Exception err)
-        {
-            Console.WriteLine(err.Message);
+        Console.WriteLine(_tac_code);
+        Console.WriteLine(_expiry);
+        Console.WriteLine(data.TAC);
 
-            return new JsonResult(new { status = false });
+        if (_tac_code == data.TAC && DateTime.Now < DateTime.Parse(_expiry))
+        {
+            
+            try
+            {
+                Console.WriteLine(data.Agensi);
+                await _Db.AddAsync(data);
+                await _Db.SaveChangesAsync();
+
+                _result = true;
+            }
+            catch (Exception err)
+            {
+                await Helper.Log(_Db, err.Message, "AccountController/Daftar");
+            }
+
         }
+                
+        return new JsonResult(new { status = _result });
+
+
+    }
+
+
+    [HttpPost]
+    public async Task<IActionResult> setTAC(string msisdn)
+    {
+
+        var _tac    = new Random().Next(1000, 9999);
+        var _result = false;
+
+        var _setting = await _Db.Setting.AsNoTracking().SingleOrDefaultAsync(x => x.Key == "SMS");
+        var _sms     = JsonConvert.DeserializeObject<Setting_SMS>(_setting.Value);
+        
+        if (_sms != null)
+        {
+            try
+            {
+                var _payload = new { keyword= "NIOSH", msisdn = msisdn, message = "Pendaftaran Gemaputera 2024. Kod TAC anda adalah: " + _tac };
+                var _client  = _httpClientFactory.CreateClient();
+                var _content = new StringContent(JsonConvert.SerializeObject(_payload), Encoding.UTF8, "application/json");
+                // _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes(_sms.API)));
+                
+                _client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", _sms.API);
+                _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var _response = await _client.PostAsync(_sms.Url, _content);
+
+                var _responseContent = await _response.Content.ReadAsStringAsync();
+                if (_response.IsSuccessStatusCode)
+                {
+                    HttpContext.Session.SetString("tac_code", _tac.ToString());
+                    HttpContext.Session.SetString("tac_expiry", DateTime.Now.AddMinutes(5).ToString());
+                    _result = true;
+                }
+                else
+                {
+                    await Helper.Log(_Db, _responseContent, "AccountController/setTAC");
+                }
+            }
+            catch (Exception err)
+            {
+                await Helper.Log(_Db, err.Message, "AccountController/setTAC");
+            }
+            
+        }
+
+        return new JsonResult(new { status = _result});
     }
 
     [HttpPost]
@@ -141,7 +204,7 @@ public class AccountController : Controller
             }
             catch (Exception err)
             {
-                Helper.Log(_Db, err.Message, "AccountController/ForgotPassword");
+                await Helper.Log(_Db, err.Message, "AccountController/ForgotPassword");
             }
         }
 

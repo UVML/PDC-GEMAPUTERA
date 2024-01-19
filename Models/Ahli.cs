@@ -57,20 +57,6 @@ public class Ahli
         }
     }
 
-    [NotMapped]
-    public bool IsResit{
-        get
-        {
-            if (System.IO.Directory.GetFiles($"wwwroot/uploads/{Agensi}/").Count() > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-    }
 
 }
 

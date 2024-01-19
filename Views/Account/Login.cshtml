@@ -19,7 +19,7 @@
 
     <style>
         body {
-            background-color:  #6495ED;
+            background-color: #6495ED;
             justify-content: center;
             align-items: center;
             height: 100vh;
@@ -63,12 +63,12 @@
                                         </div>
                                         <div class="row mb-3">
                                             <div class="col">
-                                                <img src="~/images/gemaputera.png" width="350px"  />
+                                                <img src="~/images/gemaputera.png" width="350px" />
                                             </div>
                                         </div>
                                     </div>
 
-                                    <form action="Login" method="post" class="mb-3">
+                                    <form v-on:submit.prevent="validateCaptcha" method="post" action="Login" class="mb-3">
                                         <div class="mb-3">
                                             <input type="text" id="email" name="email" class="form-control"
                                                 placeholder="Emel Pengguna" required ref="EmelPengguna">
@@ -76,6 +76,19 @@
                                         <div class="mb-3">
                                             <input type="password" id="password" name="password" class="form-control"
                                                 placeholder="Kata Laluan" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <input type="text" id="captcha" name="captcha" class="form-control"
+                                                        placeholder="Captcha" required />
+                                                </div>
+                                                <div class="col-auto">
+                                                    <span class="captcha" v-html="captchaKey"></span>
+                                                </div>
+                                            </div>
+                                            <!--add captcha, tranform text using css-->
+
                                         </div>
                                         <button type="submit" class="btn btn-primary form-control">Log Masuk</button>
                                     </form>
@@ -90,7 +103,7 @@
 
                                     <p class="text-center small">Daftar Sebagai Sekretariat Kontinjen</p>
 
-                                    <form v-on:submit.prevent="daftar()">
+                                    <form v-on:submit.prevent="pengesahan()">
                                         <div class="mb-3">
                                             <select asp-for="Agensi" class="form-control" required
                                                 v-model="pengguna.agensi">
@@ -114,21 +127,42 @@
                                                 v-model="pengguna.jawatan">
                                         </div>
                                         <div class="mb-3">
-                                            <input asp-for="Telefon" type="tel" class="form-control"
-                                                placeholder="No Telephone (HP)" v-model="pengguna.telefon"
-                                                required="required" pattern="[0-9-]+" minlength="9" maxlength="11">
+                                            <div class="row">
+                                                <div class="col-3">
+                                                    <span class="input-group-text">+60</span>
+                                                </div>
+                                                <div class="col">
+                                                    <input asp-for="Telefon" type="tel" class="form-control"
+                                                        placeholder="No HP eg 12XXXXXXX" v-model="pengguna.telefon"
+                                                        required="required" pattern="[0-9-]+" minlength="8" maxlength="11">
+
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="mb-3">
                                             <input asp-for="KataLaluan" type="password" class="form-control"
-                                                v-model="pengguna.kataLaluan" placeholder="Kata Laluan" required>
+                                                v-model="pengguna.kataLaluan" minlength="8" placeholder="Kata Laluan" required>
                                         </div>
-
                                         <div class="mb-3">
                                             <input Id="KataLaluan2" type="password" class="form-control"
                                                 v-model="kataLaluanConfirm" placeholder="Pengesahan Kata Laluan">
                                         </div>
-                                        <button type="submit" class="btn btn-primary form-control"
-                                            :disabled="pengguna.kataLaluan !=  kataLaluanConfirm">Daftar</button>
+                                        <div v-if="IsTAC==false">
+                                            <div class="mb-3">
+                                                <button type="submit" class="btn btn-primary form-control"
+                                                    :disabled="pengguna.kataLaluan !=  kataLaluanConfirm">Pengesahan SMS</button>
+                                            </div>
+                                        </div>
+                                        <div v-if="IsTAC==true">
+                                            <div class="mb-3">
+                                                <input Id="TAC" type="password" class="form-control" style="border-color: red;"
+                                                    v-model="pengguna.TAC" placeholder="4-digit TAC">
+                                            </div>
+                                            <div class="mb-3">
+                                                <button @@click="daftar()" class="btn btn-success form-control"
+                                                :disabled="pengguna.kataLaluan !=  kataLaluanConfirm">Daftar</button>
+                                            </div>
+                                        </div>
                                     </form>
 
                                 </div>
@@ -152,18 +186,44 @@
         var app = new Vue({
             el: '#app',
             data: {
-                pengguna: { agensi: "0", emel: "", namaPenuh: "", jawatan: "", telefon: "", kataLaluan: "" },
+                pengguna: { agensi: "0", emel: "", namaPenuh: "", jawatan: "", telefon: "", kataLaluan: "", TAC: "" },
                 kataLaluanConfirm: "",
-                IsWait: false
+                IsWait: false,
+                captchaKey: "",
+                IsTAC : false,
             },
 
             mounted() {
+                this.captcha();
             },
 
             methods: {
 
-                daftar() {
-                    console.log("daftar");
+                pengesahan() {
+                    let hp = "60" + app.pengguna.telefon;
+
+                    $.ajax({
+                        url: '@Url.Content("~/Account/setTAC")',
+                        type: "POST",
+                        data: {"msisdn": hp},
+                        success: function (response) {
+                            console.log(response);
+
+                            if (response.status == true){
+                                toastr.success(`Kod TAC telah dihantar ke ${hp}. Kod akan tamat tempoh dalam 5 minit.`);
+                                app.IsTAC = true;                                
+                                $("input").prop('readonly', true);
+                            }
+                        },
+                        error: function (response) {
+                            toastr.error("Pengesahan SMS gagal. Sila cuba semula.");                            
+                        }
+
+                    });
+                },
+
+                 daftar() {
+                    app.pengguna.telefon = "60" + app.pengguna.telefon;
 
                     $.ajax({
                         url: '@Url.Content("~/Account/Daftar")',
@@ -171,17 +231,20 @@
                         data: app.pengguna,
                         success: function (response) {
                             if (response.status == true) {
-                                alert("Pendaftaran Berjaya");
-                                window.location.href = '@Url.Content("~/Account/Login")';
+                                toastr.success("Pendaftaran Berjaya. Sila log masuk.");
+
+                                setTimeout(function () {
+                                    window.location.href = '@Url.Content("~/Account/Login")';
+                                }, 1500);                                
                             }
                             else {
-                                alert("Pendaftaran gagal, pastikan emel belum didaftarkan.");
+                                toastr.error("Pendaftaran tidak berjaya, pastikan emel belum didaftarkan, atau TAC adalah betul.");
                             }
                         },
                         error: function (response) {
-                            alert("Pendaftaran Gagal");
+                            toastr.error("Pendaftaran tidak berjaya, pastikan emel belum didaftarkan, atau TAC adalah betul.");
                         }
-                    });
+                    });                    
                 },
 
                 forgotPassword() {
@@ -213,12 +276,56 @@
                                     toastr.error("Emel gagal dihantar. Pastikan emel anda betul.");
                                 }
 
-                               app.IsWait = false;
+                                app.IsWait = false;
                             }
                         });
                     }
 
+                },
+
+                captcha: function () {
+                    var a = Math.floor(Math.random() * 10) + 1;
+                    var b = Math.floor(Math.random() * 10) + 1;
+                    var c = Math.floor(Math.random() * 10) + 1;
+                    var d = Math.floor(Math.random() * 10) + 1;
+                    var e = Math.floor(Math.random() * 10) + 1;
+                    var code = a + "" + b + "" + "" + c + "" + d + "" + e;
+                    this.captchaKey = code;
+                },
+
+                //write a function to validate captcha, if valid ajax post the form to server
+                validateCaptcha: function () {
+                    var cap = document.getElementById('captcha').value;
+                    var uid = document.getElementById('email').value;
+                    var pwd = document.getElementById('password').value;
+                    
+
+                    if (cap == this.captchaKey) {
+                        //post the username and password to server
+                        console.log("submit");
+                        this.$emit('submit', { email:uid, password:pwd })
+
+                       $.ajax({
+                            url: '@Url.Content("~/Account/Login")',
+                            type: "POST",
+                            data: { email: uid, password: pwd },
+                            success: function (response) {
+                                if (response.status == true) {
+                                    window.location.href = response.url;
+                                }
+                                else {
+                                    toastr.error("Login gagal. Pastikan emel dan kata laluan betul.");
+                                }
+                            }
+                        });
+                        
+                    }
+                    else {
+                        toastr.error("Captcha tidak betul. Sila cuba semula.");
+                    }
                 }
+
+
             }
         });
 

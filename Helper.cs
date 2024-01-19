@@ -1,6 +1,6 @@
 public static class Helper
 {
-    public static async void Log(ApplicationDbContext _Db, string message, string location = "")
+    public static async Task Log(ApplicationDbContext _Db, string message, string location = "")
     {
         _Db.Add(new Logger
         {

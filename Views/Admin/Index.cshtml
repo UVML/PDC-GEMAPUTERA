@@ -1,5 +1,7 @@
-@model IEnumerable<Ahli>
-
+@model IEnumerable<dynamic>
+@{
+    var Index=0;
+}
 <div id="app">
 
     <div class="row">
@@ -9,7 +11,7 @@
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                     <button class="nav-link active text-dark" id="nav-home-tab" data-bs-toggle="tab"
                         data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
-                        aria-selected="true">Administration</button>
+                        aria-selected="true">Semak Penyertaan</button>
 
                     <button class="nav-link text-dark" id="nav-user-tab" data-bs-toggle="tab"
                         data-bs-target="#nav-user" type="button" role="tab" aria-controls="nav-user"
@@ -24,150 +26,204 @@
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                     <div class="p-2 mt-3">
-                        @foreach (var Agensi in ViewBag.Agencies)
+                       
+                        @foreach (var item in Model)
                         {
-                            var _ListOfSukan = Model.Where(x => x.Agensi == Agensi.Name).ToList();
-                            var _DistinctSukan = _ListOfSukan.Select(x => x.JenisSukan).Distinct().ToList();
-
+                            var _agensi = item.Agensi.Replace(" ", "");
+                            
                             <div class="card mb-3">
                                 <div class="card-header">
                                     <div class="row">
                                         <div class="col">
-                                            <span class="fa-solid fa-chevron-down"></span> <strong class="text-primary">@Agensi.Name </strong> ( Jumlah Yuran: RM @Agensi.Fee.ToString("#,#00.00"))
+                                            <span class="fa-solid fa-chevron-down"></span> <strong class="text-primary">@item.Agensi</strong> ( Jumlah Yuran: RM @item.Yuran)
                                         </div>
                                         <div class="col-auto">                                            
+                                            @* 
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-outline-dark btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                                     Buka Lampiran
                                                 </button>
                                                 <ul class="dropdown-menu">
                                                     <li><a class="dropdown-item" target="_blank"  href="~/uploads/@Agensi.Name/@Agensi.FileYuran">Bayaran Yuran</a></li>
-                                                    <li><a class="dropdown-item" target="_blank"  href="~/uploads/@Agensi.Name/@Agensi.FileResit">Resit Resmi</a></li>                                                
+                                                    <li><a class="dropdown-item" target="_blank"  href="~/uploads/@Agensi.Name/@Agensi.FileResit">Resit Resmi</a></li>                                                 
                                                 </ul>
                                             </div>
+                                            *@
                                         </div>
                                     </div>
                                 </div>
                                 <div class="card-body">
                                     <div class="row mb-2">
-                                        <div class="col-8">
-                                            @foreach (var Sukan in _DistinctSukan.OrderBy(x =>x))
+                                        <div class="col-8">                                           
+                                            <div class="accordion accordion-flush" id="accordionFlushExample">
+                                            @foreach(var sukan in item.Sukans)
                                             {
-                                                var JenisSukan = Sukan.Replace(" ", "");
+                                                var _sukan =  _agensi + "-" + sukan.Replace(" ", "") ;
 
-                                                <div class="accordion accordion-flush" id="accordionFlushExample">
-                                                    <div class="accordion-item">
-                                                        <h2 class="accordion-header" id="flush-@JenisSukan">
-                                                            <div class="row">
-                                                                <div class="col">
-                                                                    <button class="accordion-button collapsed" type="button"
-                                                                        data-bs-toggle="collapse"
-                                                                        data-bs-target="#flush-collapse-@JenisSukan" aria-expanded="false"
-                                                                        aria-controls="flush-collapse-@JenisSukan">
-                                                                        <span class="small">@Sukan</span>
-                                                                    </button>
-                                                                </div>
-                                                                <div class="col-auto">                                                                    
-                                                                    <a target="_blank" class="btn btn-sm btn-outline-dark" asp-controller="Pasukan" asp-action="Cetak" asp-route-sukan="@Sukan" title="Cetak"><span class="fa-solid fa-print"></span> </a>
-                                                                </div>
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header" id="flush-@_sukan">
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <button class="accordion-button collapsed" type="button"
+                                                                    data-bs-toggle="collapse"
+                                                                    data-bs-target="#flush-collapse-@_sukan" aria-expanded="false"
+                                                                    aria-controls="flush-collapse-@_sukan">
+                                                                    <span class="small">@sukan</span>
+                                                                </button>
                                                             </div>
-                                                           
-                                                            
-                                                        </h2>
+                                                            <div class="col-auto">                                                                    
+                                                                <a target="_blank" class="btn btn-sm btn-outline-dark" href='@Url.Content("~/Pasukan/Cetak?Sukan=" + sukan)' title="Cetak"><span class="fa-solid fa-print"></span> </a>
+                                                            </div>
+                                                        </div>
+                                                    </h2>
 
-                                                        <div id="flush-collapse-@JenisSukan" class="accordion-collapse collapse"
-                                                            aria-labelledby="flush-@JenisSukan"
-                                                            data-bs-parent="#accordionFlushExample">
-                                                            <div class="accordion-body">
-                                                                <div class="table-responsive">
-                                                                    <table class="table table-sm" style="font-size:9pt">
+                                                    <div id="flush-collapse-@_sukan" class="accordion-collapse collapse"
+                                                        aria-labelledby="flush-@_sukan"
+                                                        data-bs-parent="#accordionFlushExample">
+                                                        <div class="accordion-body">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-sm" style="font-size:9pt">
+                                                                    <tr>
+                                                                        <td></td>
+                                                                        <td>Nama Penuh</td>
+                                                                        <td>No KP</td>
+                                                                        <td>No Pekerja</td>
+                                                                        <td>No KWSP</td>
+                                                                        <td>Taraf J.</td>
+                                                                        <td>Kumpulan J.</td>
+                                                                        <td>Gred J.</td>
+                                                                        <td>Kategori Pemain</td>
+                                                                        <td>Gambar</td>
+                                                                        <td>KP</td>
+                                                                        <td>KWSP</td>
+                                                                        <td>Majikan</td>
+                                                                        <td>Pengarah / SSM</td>
+                                                                    </tr>
+                                                                    @{
+                                                                        var Ahlis = ((List<Ahli>)item.Ahlis).Where(x => x.JenisSukan == sukan);
+                                                                    }
+                                                                    @foreach(var Ahli in Ahlis)
+                                                                    {
                                                                         <tr>
-                                                                            <td></td>
-                                                                            <td>Nama Penuh</td>
-                                                                            <td>No KP</td>
-                                                                            <td>No Pekerja</td>
-                                                                            <td>No KWSP</td>
-                                                                            <td>Taraf J.</td>
-                                                                            <td>Kumpulan J.</td>
-                                                                            <td>Gred J.</td>
-                                                                            <td>Kategori Pemain</td>
-                                                                            <td>Gambar</td>
-                                                                            <td>KP</td>
-                                                                            <td>KWSP</td>
-                                                                            <td>Majikan</td>
-                                                                            <td>Pengarah / SSM</td>
+                                                                            <td>@Ahli.JenisAhli</td>
+                                                                            <td>@Ahli.NamaPenuh</td>
+                                                                            <td>@Ahli.NoKP</td>
+                                                                            <td>@Ahli.NoPekerja</td>
+                                                                            <td>@Ahli.NoKWSP</td>
+                                                                            <td>@Ahli.TarafJawatan</td>
+                                                                            <td>@Ahli.KumpulanJawatan</td>
+                                                                            <td>@Ahli.GredJawatan</td>
+                                                                            <td>@Ahli.KategoriPermainan</td>
+                                                                            <td><a target="_blank" href="~/uploads/@Ahli.Id/@Ahli.FileGambar" 
+                                                                            data-bs-toggle="tooltip" data-bs-html="true" title="<img src='@Url.Content("~/uploads/" + @Ahli.Id + "/" + @Ahli.FileGambar)' class='img-fluid'>" >@Ahli.FileGambar</a></td>
+                                                                            <td><a target="_blank" href="~/uploads/@Ahli.Id/@Ahli.FileKP"
+                                                                            data-bs-toggle="tooltip" data-bs-html="true" title="<img src='@Url.Content("~/uploads/" + @Ahli.Id + "/" + @Ahli.FileKP)' class='img-fluid'>">@Ahli.FileKP</a></td>
+                                                                            <td><a target="_blank" href="~/uploads/@Ahli.Id/@Ahli.FileKWSP"
+                                                                            data-bs-toggle="tooltip" data-bs-html="true" title="<img src='@Url.Content("~/uploads/" + @Ahli.Id + "/" + @Ahli.FileKWSP)' class='img-fluid'>">@Ahli.FileKWSP</a></td>
+                                                                            <td><a target="_blank" href="~/uploads/@Ahli.Id/@Ahli.FileMajikan"
+                                                                            data-bs-toggle="tooltip" data-bs-html="true" title="<img src='@Url.Content("~/uploads/" + @Ahli.Id + "/" + @Ahli.FileMajikan)' class='img-fluid'>">@Ahli.FileMajikan</a></td>
+                                                                            <td><a target="_blank" href="~/uploads/@Ahli.Id/@Ahli.FileSuratLantikan"
+                                                                            data-bs-toggle="tooltip" data-bs-html="true" title="<img src='@Url.Content("~/uploads/" + @Ahli.Id + "/" + @Ahli.FileSuratLantikan)' class='img-fluid'>">@Ahli.FileSuratLantikan</a></td>
                                                                         </tr>
-                                                                        @foreach(var Ahli in _ListOfSukan.Where(x => x.JenisSukan == Sukan))
-                                                                        {
-                                                                            <tr>
-                                                                                <td>@Ahli.JenisAhli</td>
-                                                                                <td>@Ahli.NamaPenuh</td>
-                                                                                <td>@Ahli.NoKP</td>
-                                                                                <td>@Ahli.NoPekerja</td>
-                                                                                <td>@Ahli.NoKWSP</td>
-                                                                                <td>@Ahli.TarafJawatan</td>
-                                                                                <td>@Ahli.KumpulanJawatan</td>
-                                                                                <td>@Ahli.GredJawatan</td>
-                                                                                <td>@Ahli.KategoriPermainan</td>
-                                                                                <td><a target="_blank" href="~/uploads/@Ahli.Id/@Ahli.FileGambar" 
-                                                                                data-bs-toggle="tooltip" data-bs-html="true" title="<img src='@Url.Content("~/uploads/" + @Ahli.Id + "/" + @Ahli.FileGambar)' class='img-fluid'>" >@Ahli.FileGambar</a></td>
-                                                                                <td><a target="_blank" href="~/uploads/@Ahli.Id/@Ahli.FileKP"
-                                                                                data-bs-toggle="tooltip" data-bs-html="true" title="<img src='@Url.Content("~/uploads/" + @Ahli.Id + "/" + @Ahli.FileKP)' class='img-fluid'>">@Ahli.FileKP</a></td>
-                                                                                <td><a target="_blank" href="~/uploads/@Ahli.Id/@Ahli.FileKWSP"
-                                                                                data-bs-toggle="tooltip" data-bs-html="true" title="<img src='@Url.Content("~/uploads/" + @Ahli.Id + "/" + @Ahli.FileKWSP)' class='img-fluid'>">@Ahli.FileKWSP</a></td>
-                                                                                <td><a target="_blank" href="~/uploads/@Ahli.Id/@Ahli.FileMajikan"
-                                                                                data-bs-toggle="tooltip" data-bs-html="true" title="<img src='@Url.Content("~/uploads/" + @Ahli.Id + "/" + @Ahli.FileMajikan)' class='img-fluid'>">@Ahli.FileMajikan</a></td>
-                                                                                <td><a target="_blank" href="~/uploads/@Ahli.Id/@Ahli.FileSuratLantikan"
-                                                                                data-bs-toggle="tooltip" data-bs-html="true" title="<img src='@Url.Content("~/uploads/" + @Ahli.Id + "/" + @Ahli.FileSuratLantikan)' class='img-fluid'>">@Ahli.FileSuratLantikan</a></td>
-                                                                            </tr>
-                                                                        }
-                                                                    
-                                                                    </table>
-                                                                </div>
+                                                                    }
+                                                                
+                                                                </table>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             }
+                                            </div>                                            
                                         </div>
                                         <div class="col-4">
+                                            <ul class="nav nav-tabs" id="myTab-@_agensi" role="tablist">
+                                                <li class="nav-item" role="presentation">
+                                                    <button class="nav-link active" id="yuran-tab-@_agensi" data-bs-toggle="tab" data-bs-target="#yuran-@_agensi" type="button" role="tab" aria-controls="yuran-@_agensi" aria-selected="true">Bayaran Yuran</button>
+                                                </li>
+                                                <li class="nav-item" role="presentation">
+                                                    <button class="nav-link" id="resit-tab-@_agensi" data-bs-toggle="tab" data-bs-target="#resit-@_agensi" type="button" role="tab" aria-controls="resit-@_agensi" aria-selected="false">Resit Rasmi</button>
+                                                </li>
+                                            </ul>
+
+                                            <div class="tab-content" id="myTabContent-@_agensi">
+                                                <div class="tab-pane fade show active small" id="yuran-@_agensi" role="tabpanel" aria-labelledby="yuran-tab-@_agensi">
+                                                    <div class="row mt-2">
+                                                        <div class="col">
+
+                                                                <embed v-if="attachment[@Index].fileYuran.endsWith('.pdf')" :src="'@Url.Content("~/uploads/")' + attachment[@Index].agensi + '/' + attachment[@Index].fileYuran" width="100%" height="200px" />
+                                                                
+                                                                <div v-else style="display: d-flex; overflow:auto; max-height:200px; max-width:100%">
+                                                                    <img :src="'/uploads/' + attachment[@Index].agensi + '/' + attachment[@Index].fileYuran" style="" >                                                
+                                                                </div>
+                                                                
+                                                                <table class="table table-sm small ">
+                                                                    <tr>
+                                                                        <td class="col-3">Tarikh Dimuat Naik</td>
+                                                                        <td>{{attachment[@Index].tarikhHantar}}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Catatan</td>
+                                                                        <td>{{attachment[@Index].catatan}}</td>
+                                                                    </tr>
+                                                                </table>                                                               
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade small" id="resit-@_agensi" role="tabpanel" aria-labelledby="resit-tab-@_agensi">
+                                                    
+                                                    <div class="row mt-2 mb-2">
+                                                        <div class="col">
+                                                            
+                                                        </div>
+                                                        <div class="col-auto">
+                                                            
+                                                        </div>                                              
+                                                    </div>
+                                                    
+                                                    <div class="row mb-2">
+                                                        <div class="col">
+
+                                                                <embed v-if="attachment[@Index].fileResit != null && attachment[@Index].fileResit.endsWith('.pdf')" :src="'/uploads/' + attachment[@Index].agensi + '/' + attachment[@Index].fileResit" width="100%" height="200px" />                                            
+                                                                
+                                                                <div v-if="attachment[@Index].fileResit != null && attachment[@Index].fileResit.endsWith('.jpg')" style="display: d-flex; overflow:auto; max-height:200px; max-width:100%">
+                                                                    <img :src="'/uploads/' + attachment[@Index].agensi + '/' + attachment[@Index].fileResit" style="" >                                                
+                                                                </div>                                            
+                                                                
+                                                                 <table class="table table-sm small ">
+                                                                    <tr>
+                                                                        <td class="col-3">Tarikh Dimuat Naik</td>
+                                                                        <td>{{attachment[@Index].tarikhResit}}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Muat Naik</td>
+                                                                        <td><input type="file" class="" accept=".pdf,.jpg" @@change="handleFileChange('@item.Agensi')"></td>
+                                                                    </tr>
+                                                                </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            
+                                            </div>
+
+
                                             <!-- PREVIEW RECEIPT IN PDF OR JPEG -->
                                             <div class="row mb-1 small">
                                                 <div class="col">
-                                                    <span class="fa-solid fa-chevron-down"></span> Bayaran Yuran: <strong> @Agensi.TarikhHantar</strong>
+                                                    
                                                 </div>
                                                 <div class="col-auto">                                                    
                                                     
                                                 </div>
                                             </div>
-                                            <div class="row mb-2">
-                                                <div class="col">
-
-                                                    @if (Agensi.FileYuran != null && Agensi.FileYuran.EndsWith(".pdf"))
-                                                    {
-                                                        <embed src="~/uploads/@Agensi.Name/@Agensi.FileYuran" width="100%" height="200px" />                                            
-                                                    }
-                                                    else
-                                                    {                                                         
-                                                        <div style="display: d-flex; overflow:auto; max-height:200px; max-width:100%">
-                                                            <img src="~/uploads/@Agensi.Name/@Agensi.FileYuran" style="" >                                                
-                                                        </div>                                            
-                                                    }
                                             
-                                                </div>
-                                            </div>
-                                            <span class="small"><span class="fa-solid fa-chevron-down"></span> Resit Rasmi:  <strong> @Agensi.TarikhResit</strong></span>
-                                            <div class="border p-2 rounded">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <input type="file" class="form-control" accept=".pdf,.jpg" @@change="handleFileChange('@Agensi.Name')">
-                                                </div>                                                
-                                            </div>
-                                            </div>
+                                            
+                                            
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
+                            Index++;
                         }
                     </div>
                 </div>
@@ -188,7 +244,7 @@
                                         <th>Jawatan</th>
                                         <th></td>
                                     </tr>
-                                    <tr v-for="item in pengguna">
+                                    <tr v-for="item in setup.pengguna">
                                         <td><strong class="text-primary">{{item.agensi}}</strong></td>
                                         <td>{{item.namaPenuh}}</td>
                                         <td>{{item.emel}}</td>
@@ -219,7 +275,7 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <input type="date" class="form-control=sm" v-model="tarikhTutup">
+                                <input type="date" class="form-control=sm" v-model="setup.tarikhTutup">
                             </div>
                         </div>
 
@@ -251,7 +307,7 @@
                                         <th><span class="fa-solid fa-user-doctor text-secondary"></span> Bil. Fisio</th>
                                         <th><span class="fa-solid fa-people-group text-secondary"></span> Bil. Pemain</th>
                                     </tr>
-                                    <tr v-for="item in sukan">
+                                    <tr v-for="item in setup.sukan">
                                         <td><input type="text" v-model="item.nama" class="form-control"/></td>
                                         <td><input type="number" v-model="item.fee" class="form-control"/></td>
                                         <td><input type="text" v-model="item.kategori" class="form-control"/></td>
@@ -283,19 +339,19 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group mb-3">
-                        <input type="password" class="form-control" v-model="KataLaluanLama" placeholder="Kata Laluan Lama">
+                        <input type="password" class="form-control" v-model="kataLaluan.lama" placeholder="Kata Laluan Lama">
                     </div>
                     <div class="form-group mb-2">
-                        <input type="password" class="form-control" v-model="KataLaluanBaru" placeholder="Kata Laluan Baru">
+                        <input type="password" class="form-control" v-model="kataLaluan.baru" placeholder="Kata Laluan Baru">
                     </div>
                     <div class="form-group mb-2">                        
-                        <input type="password" class="form-control" v-model="KataLaluanConfirm" placeholder="Kata Laluan Baru">
+                        <input type="password" class="form-control" v-model="kataLaluan.confirm" placeholder="Kata Laluan Baru">
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
                     <button type="button" class="btn btn-outline-primary btn-sm" 
-                        :disabled="(KataLaluanLama=='' || KataLaluanBaru=='') || KataLaluanBaru != KataLaluanConfirm"
+                        :disabled="(kataLaluan.lama=='' || kataLaluan.baru=='') || kataLaluan.baru != kataLaluan.confirm"
                         @@click="tukarKataLaluan()"
                     >Simpan</button>
                 </div>
@@ -315,13 +371,19 @@
          var app = new Vue({
             el: '#app',
             data: {
-                KataLaluanLama: '',
-                KataLaluanBaru: '',
-                KataLaluanConfirm: '',
-                pengguna:[],
-                sukan:[],
-                tarikhTutup: '',
-                TempResit: '',
+                kataLaluan: {
+                    lama: '',
+                    baru: '',
+                    confirm: ''
+                },
+                setup: {
+                    pengguna:[],
+                    sukan:[],
+                    tarikhTutup: '',
+                },
+                attachment: @Html.Raw(Json.Serialize(ViewBag.Attachment)), 
+
+                model:[]               
             },
             computed: {
             },
@@ -336,8 +398,8 @@
                         url: '@Url.Content("~/Home/TukarKataLaluan")',
                         type: 'POST',
                         data: {
-                            KataLaluanLama: app.KataLaluanLama,
-                            KataLaluanBaru: app.KataLaluanBaru
+                            KataLaluanLama: app.kataLaluan.lama,
+                            KataLaluanBaru: app.kataLaluan.baru
                         },
                         success: function (data) {
                             if (data.status == true) {
@@ -363,7 +425,7 @@
                         url: '@Url.Content("~/Admin/GetPengguna")',
                         type: 'GET',
                         success: function (data) {
-                            app.pengguna = data;
+                            app.setup.pengguna = data;
                         },
                         error: function (error) {
                             console.log(error);
@@ -401,11 +463,10 @@
                         url: '@Url.Content("~/Admin/GetSukan")',
                         type: 'GET',
                         success: function (data) {
-                            app.sukan = data;
-                            app.sukan.forEach(function (item) {
+                            app.setup.sukan = data;
+                            app.setup.sukan.forEach(function (item) {
                                 item.konfigurasi = JSON.parse(item.konfigurasi);
                             });
-                            console.log(app.sukan);
                         },
                         error: function (error) {
                             console.log(error);
@@ -415,7 +476,7 @@
 
                 simpanSukan: function() {
 
-                    app.sukan.forEach(function (item) {
+                    app.setup.sukan.forEach(function (item) {
                         item.konfigurasi = JSON.stringify(item.konfigurasi);
                     });
 
@@ -423,7 +484,7 @@
                         url: '@Url.Content("~/Admin/SimpanSukan")',
                         type: 'POST',
                         data: {
-                            Sukan: app.sukan
+                            Sukan: app.setup.sukan
                         },
                         success: function (data) {
                             if (data.status == true) {
@@ -445,7 +506,7 @@
                         url: '@Url.Content("~/Admin/GetTarikhTutup")',
                         type: 'GET',
                         success: function (data) {
-                            app.tarikhTutup = data;
+                            app.setup.tarikhTutup = data;
                         },
                         error: function (error) {
                             console.log(error);
@@ -458,7 +519,7 @@
                         url: '@Url.Content("~/Admin/SimpanTarikhTutup")',
                         type: 'POST',
                         data: {
-                            TarikhTutup: app.tarikhTutup
+                            TarikhTutup: app.setup.tarikhTutup
                         },
                         success: function (data) {
                             if (data.status == true) {
@@ -476,16 +537,14 @@
                 },
 
                 handleFileChange(agensi) {
-                    app.TempResit = event.target.files[0];
+                    app.attachment.tempResit = event.target.files[0];
                     app.uploadResit(agensi);
                 },
 
                 uploadResit: function (agensi) {
 
-                    console.log(agensi);
-
                     var formData = new FormData();
-                    formData.append('file', app.TempResit);
+                    formData.append('file', app.attachment.tempResit);
                     formData.append('agensi', agensi);
 
                     $.ajax({
@@ -496,7 +555,8 @@
                         processData: false,
                         success: function (data) {
                             if (data.status == true) {
-                                toastr.success('Resit berjaya dimuat naik');                                                           
+                                app.getAttachment();                                                         
+                                toastr.success('Resit berjaya dimuat naik');  
                             }
                             else {
                                 toastr.error('Fail gagal dimuat naik');
@@ -510,7 +570,39 @@
                     });
                 },
 
+                getAttachment: function(agensi) {
+                    $.ajax({
+                        url: '@Url.Content("~/Admin/GetAttachment")',
+                        type: 'GET',
+                        success: function (data) {
+                            app.attachment = data;                            
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
+                    });
+                },
+                
+                getAdmin : function() {
+                    $.ajax({
+                        url: '@Url.Content("~/Admin/GetAdmin")',
+                        type: 'GET',
+                        success: function (data) {
+                            app.model = data;
+                            console.log(app.model);
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
+                    });
+                },
 
+                getAhli : function(ahlis, sukan){
+                    //console.log(ahlis);
+                    //console.log(sukan);
+
+                    return ahlis.filter(x => x.JenisSukan == sukan);
+                }
                 
             },
 

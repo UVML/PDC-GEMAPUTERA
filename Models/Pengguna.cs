@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace sistem_e_daftar_gemaputera.Models;
 
@@ -16,4 +17,8 @@ public class Pengguna
     public string? FileResit { get; set; }
     public DateTime? TarikhHantar { get; set; }
     public DateTime? TarikhResit { get; set; }
+    public string? Catatan { get; set; }
+
+    [NotMapped]
+    public string? TAC { get; set; }
 }
