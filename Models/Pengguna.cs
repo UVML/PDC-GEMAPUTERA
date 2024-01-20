@@ -7,11 +7,11 @@ public class Pengguna
 {
     [Key]
     public string Agensi  { get; set; }
-    public string NamaPenuh {get; set;}     
+    public string? NamaPenuh {get; set;}     
     public string Emel {get; set;}
     public string KataLaluan {get;set;}
-    public string Telefon {get;set;}
-    public string Jawatan { get; set; }
+    public string? Telefon {get;set;}
+    public string? Jawatan { get; set; }
 
     public string? FileYuran { get; set; }   
     public string? FileResit { get; set; }

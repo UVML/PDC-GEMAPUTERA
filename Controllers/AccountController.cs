@@ -105,9 +105,10 @@ public class AccountController : Controller
         if (_tac_code == data.TAC && DateTime.Now < DateTime.Parse(_expiry))
         {
             
-            try
+            try        
             {
-                Console.WriteLine(data.Agensi);
+                data.Telefon = "60" + data.Telefon;
+                
                 await _Db.AddAsync(data);
                 await _Db.SaveChangesAsync();
 

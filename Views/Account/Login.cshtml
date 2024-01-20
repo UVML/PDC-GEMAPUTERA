@@ -104,7 +104,7 @@
                                     <p class="text-center small">Daftar Sebagai Sekretariat Kontinjen</p>
 
                                     <form v-on:submit.prevent="pengesahan()">
-                                        <div class="mb-3">
+                                        <div class="mb-1">
                                             <select asp-for="Agensi" class="form-control" required
                                                 v-model="pengguna.agensi">
                                                 <option value="0" disabled selected>Pilih Nama Agensi</option>
@@ -114,19 +114,19 @@
                                                 }
                                             </select>
                                         </div>
-                                        <div class="mb-3">
+                                        <div class="mb-1">
                                             <input asp-for="Emel" type="email" class="form-control"
                                                 v-model="pengguna.emel" placeholder="Emel Pengguna" required>
                                         </div>
-                                        <div class="mb-3">
+                                        <div class="mb-1">
                                             <input asp-for="NamaPenuh" class="form-control" placeholder="Nama Penuh"
                                                 v-model="pengguna.namaPenuh" required>
                                         </div>
-                                        <div class="mb-3">
+                                        <div class="mb-1">
                                             <input asp-for="Jawatan" class="form-control" placeholder="Jawatan" required
                                                 v-model="pengguna.jawatan">
                                         </div>
-                                        <div class="mb-3">
+                                        <div class="mb-1">
                                             <div class="row">
                                                 <div class="col-3">
                                                     <span class="input-group-text">+60</span>
@@ -139,11 +139,11 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="mb-3">
+                                        <div class="mb-1">
                                             <input asp-for="KataLaluan" type="password" class="form-control"
                                                 v-model="pengguna.kataLaluan" minlength="8" placeholder="Kata Laluan" required>
                                         </div>
-                                        <div class="mb-3">
+                                        <div class="mb-1">
                                             <input Id="KataLaluan2" type="password" class="form-control"
                                                 v-model="kataLaluanConfirm" placeholder="Pengesahan Kata Laluan">
                                         </div>
@@ -154,7 +154,7 @@
                                             </div>
                                         </div>
                                         <div v-if="IsTAC==true">
-                                            <div class="mb-3">
+                                            <div class="mb-3 mt-3">
                                                 <input Id="TAC" type="password" class="form-control" style="border-color: red;"
                                                     v-model="pengguna.TAC" placeholder="4-digit TAC">
                                             </div>
@@ -223,8 +223,6 @@
                 },
 
                  daftar() {
-                    app.pengguna.telefon = "60" + app.pengguna.telefon;
-
                     $.ajax({
                         url: '@Url.Content("~/Account/Daftar")',
                         type: "POST",

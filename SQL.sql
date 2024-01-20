@@ -26,7 +26,7 @@ CREATE UNIQUE NONCLUSTERED INDEX [IX_Pengguna] ON [dbo].[Pengguna]
 )
 GO
 
-INSERT INTO Pengguna VALUES('Administrator', 'Administrator', 'Administrator','Administrator','','')
+INSERT INTO Pengguna (Agensi,Emel,KataLaluan) VALUES('Administrator', 'Administrator', 'Administrator')
 GO
 
 CREATE TABLE [Agensi] (
@@ -82,13 +82,13 @@ CREATE TABLE [Sukan] (
 )
 GO
 
-INSERT INTO Sukan VALUES('Futsal', 1000, 'A, B, C', 'Pengurus=1, Jurulatih=1, Fisio=1, Pemain=14')
-INSERT INTO Sukan VALUES('Badminton', 1000, 'A, B, C', 'Pengurus=1, Jurulatih=1, Fisio=1, Pemain=12')
-INSERT INTO Sukan VALUES('Bola Jaring', 1000, 'A, B, C', 'Pengurus=1, Jurulatih=1, Fisio=1, Pemain=12')
-INSERT INTO Sukan VALUES('Boling', 1000, 'A, B, C', 'Pengurus=1, Jurulatih=1, Fisio=0, Pemain=12')
-INSERT INTO Sukan VALUES('Ping Pong', 1000, 'A, B, C', 'Pengurus=1, Jurulatih=1, Fisio=0, Pemain=13')
-INSERT INTO Sukan VALUES('Karom', 1000, 'A, B, C', 'Pengurus=1, Jurulatih=1, Fisio=0, Pemain=11')
-INSERT INTO Sukan VALUES('Golf', 1000, 'A, B, C', 'Pengurus=1, Jurulatih=1, Fisio=0, Pemain=10')
+INSERT INTO Sukan VALUES('Futsal', 1000, 'A, B, C', '{"Pengurus":1, "Jurulatih":1, "Fisio":1, "Pemain":14}')
+INSERT INTO Sukan VALUES('Badminton', 1000, 'A, B, C', '{"Pengurus":1, "Jurulatih":1, "Fisio":1, "Pemain":12}')
+INSERT INTO Sukan VALUES('Bola Jaring', 1000, 'A, B, C', '{"Pengurus":1, "Jurulatih":1, "Fisio":1, "Pemain":12}')
+INSERT INTO Sukan VALUES('Boling', 1000, 'A, B, C', '{"Pengurus":1, "Jurulatih":1, "Fisio":0, "Pemain":12}')
+INSERT INTO Sukan VALUES('Ping Pong', 1000, 'A, B, C', '{"Pengurus":1, "Jurulatih":1, "Fisio":0, "Pemain":13}')
+INSERT INTO Sukan VALUES('Karom', 1000, 'A, B, C', '{"Pengurus":1, "Jurulatih":1, "Fisio":0, "Pemain":11}')
+INSERT INTO Sukan VALUES('Golf', 1000, 'A, B, C', '{"Pengurus":1, "Jurulatih":1, "Fisio":0, "Pemain":10}')
 
 Go
 
