@@ -41,7 +41,7 @@ public class AdminController : Controller
 
     public async Task<IActionResult> GetPengguna()
     {
-        var _model = await _Db.Pengguna.AsNoTracking().ToListAsync();
+        var _model = await _Db.Pengguna.AsNoTracking().Where(x=>x.Agensi != "Administrator").ToListAsync();
         return Json(_model);
     }
 
@@ -82,30 +82,18 @@ public class AdminController : Controller
         }
     }
 
-    public async Task<IActionResult> GetTarikhTutup()
+    public async Task<IActionResult> GetAgensi()
     {
-        var _model =_Db.Setting.AsNoTracking().Single(x=>x.Key=="TarikhTutup").Value;
-        
-        if(DateTime.TryParse(_model, out DateTime _date))
-        {
-            _model = _date.ToString("yyyy-MM-dd");
-        }
-        else
-        {
-            _model = DateTime.Now.ToString("yyyy-MM-dd");
-        }
-
+        var _model = await _Db.Agensi.AsNoTracking().ToListAsync();
         return Json(_model);
     }
 
-     public async Task<IActionResult> SimpanTarikhTutup(string tarikhTutup)
+    [HttpPost]
+     public async Task<IActionResult> SimpanAgensi(List<Agensi> data)
     {
         try
         {
-            var _item = await _Db.Setting.SingleAsync(x=>x.Key=="TarikhTutup");
-            _item.Value = tarikhTutup;
-            
-            _Db.Update(_item);
+            _Db.UpdateRange(data);
             await _Db.SaveChangesAsync();
             
             return Json(new { status = true });

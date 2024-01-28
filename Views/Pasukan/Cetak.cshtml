@@ -1,123 +1,163 @@
 @model IEnumerable<Ahli>
 @{
+    Layout = null;
     var i = 1;
     var Acara = Model.Select(x => x.JenisSukan).FirstOrDefault();
 }
-<div class="row">
-    <div class="col">
-        <img src="~/images/gemaputera.png" style="float:left; position:absolute; max-width:120px">
-        <h6 class="text-center">KEJOHANAN SUKAN GEMAPUTERA PULAU PINANG 2024 <br />BORANG PENDAFTARAN PASUKAN<br />ACARA
-            @Acara.ToUpper()</h5>
-    </div>
-</div>
-<div class="row mb-2">
-    <div class="col">
-        <table class="table table-sm table-bordered small">
-            <tr>
-                <td colspan="3">NAMA PASUKAN:</td>
-                <td colspan="2">PASUKAN NEGERI:</td>
-            </tr>
-            <tr>
-                <td>BIL</td>
-                <td>NAMA PEGAWAI</td>
-                <td>JAWATAN</td>
-                <td>NO. PEKERJA / KWSP</td>
-                <td>TELEFON</td>
-            </tr>
-            @foreach (var item in Model.Where(x => x.JenisAhli != "Pemain"))
-            {
-                <tr>
-                    <td>@i</td>
-                    <td>@item.NamaPenuh</td>
-                    <td>@item.TarafJawatan</td>
-                    <td>@item.NoPekerja</td>
-                    <td>@item.Telefon</td>
-                </tr>
 
-                i++;
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />    
+    <script src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script>
+    <style>
+        @@page {
+            size: A4;
+            margin: 25mm;
+
+            @@bottom-center {
+                content: counter(page) " of " counter(pages);
             }
-            <tr>
 
-            </tr>
-        </table>
-    </div>
-</div>
+            @@top-center {
+                content: element(header);
+            }
+        }
 
-@{
-    i = 1;
-}
+        header {
+            position: running(header);
+        }
 
-<div class="row mb-2">
-    <div class="col">
-        <table class="table table-sm table-bordered small">
+        body {
+            font-size: 9pt !important;
+        }
+    </style>
 
-            <tr>
-                <td>BIL</td>
-                <td>NAMA PEGAWAI</td>
-                <td>NO K/P</td>
-                <td>KETEGORI PERMAINAN</td>
-                <td>NO. PEKERJA / KWSP</td>
-                <td>STATUS PEMAIN</td>
-            </tr>
-            @foreach (var item in Model.Where(x => x.JenisAhli == "Pemain"))
-            {
+</head>
+
+<body>
+    <header>
+        <div class="row">
+            <div class="col-2">
+                <img src="~/images/gemaputera.png" style="max-width:120px">
+            </div>
+            <div class="col">
+
+                <h6 class="text-center">KEJOHANAN SUKAN GEMAPUTERA PULAU PINANG 2024 BORANG PENDAFTARAN PASUKAN ACARA
+                    @Acara.ToUpper()</h5>
+            </div>
+        </div>
+    </header>
+    <div class="row">
+        <div class="col">
+            <table class="table table-sm table-bordered small">
                 <tr>
-                    <td>@i</td>
-                    <td>@item.NamaPenuh</td>
-                    <td>@item.NoKP</td>
-                    <td>@item.KategoriPermainan</td>
-                    <td>@item.NoPekerja</td>
-                    <td>JABATAN</td>
+                    <td colspan="10">NAMA PERBADANAN:</td>
                 </tr>
+                <tr>
+                    <td>BIL</td>
+                    <td>NAMA PEGAWAI</td>
+                    <td>JAWATAN</td>
+                    <td>NO. KWSP / SWAP</td>
+                    <td>NO. KP</td>
+                    <td>TELEFON</td>
+                </tr>
+                @foreach (var item in Model.Where(x => x.JenisAhli != "Pemain"))
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>@item.NamaPenuh</td>
+                        <td>@item.TarafJawatan</td>
+                        <td>@item.NoKWSP</td>
+                        <td>@item.NoKP</td>
+                        <td>@item.Telefon</td>
+                    </tr>
 
-                i++;
-            }            
-        </table>
-    </div>
-</div>
-<div class="row">
-    <div class="col small">
-        Nota:
-        <ol>
-            <li>Kelayakan peserta adalah berdasarkan syarat pertandingan @Acara & <strong>Peraturan Am Kejohanan Sukan
-                    Gemaputera Pulau Pinang 2024</strong>.</li>
-            <li>Nyatakan status pemain sama ada pemain peringkat Negeri (SUKMA) / Kebangsaan / Profesional</li>
-        </ol>
-        <p>TARIKH TUTUP PENYERTAAN <strong>@ViewBag.TarikhTutup</strong></p>
-        <p>Kami telah membaca dan memahami serta akan mematuhi syarat-syarat dan peraturan-peraturan kejohanan yang
-            telah ditetapkan oleh Jawatankuasa Penganjur. Saya mengesahkan bahawa segala maklumat yang dinyatakan di
-            atas adalah benar seperti dalam borang pendaftaran individu.</p>
+                    i++;
+                }
+                <tr>
 
-    </div>
-<div>
-<div class="row">
-    <div class="col small">
-        Pengurus Pasukan
-        <br />
-        <br />
-        _________________________________<br />
-        <span class="small">NAMA PENUH</span><br />
-        <span class="small">NO K/P</span><br />
-        <span class="small">EMEL</span><br />
-        <span class="small">NO TEL</span><br />
-    </div>
-    <div class="col small">
-        Disahkan oleh
-        <br />
-        <br />
-        _________________________________<br/> 
-        <span class="small">
-            (Tandatangan dan Cop)<br/>Ketua Pengawai Eksekutif / Pengurus Besar
-        </span>
+                </tr>
+            </table>
+        </div>
     </div>
 
-</div>
+    @{
+        i = 1;
+    }
 
-@section Scripts
-{
-    <script>
-        $(document).ready(function () {
-            window.print();
-        });
-    </script>
-}
+    <div class="row">
+        <div class="col">
+            <table class="table table-sm table-bordered small">
+
+                <tr>
+                    <td>BIL</td>
+                    <td>NAMA PEGAWAI</td>
+                    <td>NO K/P</td>
+                    <td>KETEGORI PERMAINAN</td>
+                    <td>NO. KWSP / KWAP</td>
+                    <td>STATUS PEMAIN</td>
+                </tr>
+                @foreach (var item in Model.Where(x => x.JenisAhli == "Pemain"))
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>@item.NamaPenuh</td>
+                        <td>@item.NoKP</td>
+                        <td>@item.KategoriPermainan</td>
+                        <td>@item.NoKWSP</td>
+                        <td>@item.StatusPemain</td>
+                    </tr>
+
+                    i++;
+                }
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col small">
+            Nota:
+            <ol>
+                <li>Kelayakan peserta adalah berdasarkan syarat peraturan pertandingan Badminton Kejohanan Sukan
+                    Gemaputera
+                    Pulau Pinang 2024</li>
+                <li>Sila email dokumen yang telah lengkap disahkan & ditandatangani kepada Urusetia Gemaputera XVII
+                    Pulau
+                    Pinang 2024 ke alamat emel : fatinrazak@pdc.gov.my / syuhada@pdc.gov.my</li>
+            </ol>
+            <p>TARIKH TUTUP PENYERTAAN <strong>@ViewBag.TarikhTutup</strong></p>            
+            <p>Kami telah membaca dan memahami serta akan mematuhi syarat-syarat dan peraturan-peraturan kejohanan yang
+                telah ditetapkan oleh Jawatankuasa Penganjur. Saya mengesahkan bahawa segala maklumat yang dinyatakan di
+                atas adalah benar seperti dalam borang pendaftaran individu.</p>
+
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col small">
+            Pengurus Pasukan
+            <br />
+            <br />
+            _________________________________<br />
+            <span class="small">NAMA PENUH</span><br />
+            <span class="small">NO K/P</span><br />
+            <span class="small">EMEL</span><br />
+            <span class="small">NO TEL</span><br />
+        </div>
+        <div class="col small">
+            Disahkan oleh
+            <br />
+            <br />
+            _________________________________<br />
+            <span class="small">
+                (Tandatangan dan Cop)<br />Ketua Pengawai Eksekutif / Pengurus Besar
+            </span>
+        </div>
+
+    </div>
+</body>
+
+</html>

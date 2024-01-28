@@ -2,6 +2,7 @@
 
     <div class="row mb-3">
         <div class="col">
+            <h4>{{selectedSukan == "Pilih Sukan" ? "" : selectedSukan.toUpperCase()}}</h5>
         </div>
         <div class="col-auto">
 
@@ -25,8 +26,7 @@
 
 
 
-    <span class="tiny text-secondary">Semua adalah wajib kecuali "Kategori Permainan" & lampiran "Surat Pengarah
-        SSM"</span>
+    <span class="tiny text-secondary">Semua adalah wajib kecuali 1) Kategori Permainan, 2) Status Pemain dan 3) Lampiran Surat Pengarah SSM</span>
     <div class="card mb-3">
         <div class="card-header">
             <span class="fa-solid fa-user-tie"></span> <span class="text-primary">Pengurus</span>
@@ -107,8 +107,7 @@
         </div>
     </div>
 
-    <span class="tiny text-secondary">Semua adalah wajib kecuali "Kategori Permainan" & lampiran "Surat Pengarah
-        SSM"</span>
+    <span class="tiny text-secondary">Hanya 1) Nama Penuh, 2) No KP, 3) Telefon, 4) Lampiran Gambar dan 5) Kad Pengenalan adalah wajib</span>
     <div class="card mb-3">
         <div class="card-header">
             <span class="fa-solid fa-person-chalkboard"></span> <span class="text-primary">Jurulatih</span>
@@ -126,8 +125,7 @@
         </div>
     </div>
 
-    <span class="tiny text-secondary">Semua adalah wajib kecuali "Kategori Permainan" & lampiran "Surat Pengarah
-        SSM"</span>
+    <span class="tiny text-secondary">Semua adalah wajib kecuali 1) Kategori Permainan, 2) Status Pemain dan 3) Lampiran Surat Pengarah SSM</span>
     <div class="card mb-3">
         <div class="card-header">
             <span class="fa-solid fa-user-doctor"></span> <span class="text-primary">Fisio</span>
@@ -145,7 +143,7 @@
         </div>
     </div>
 
-    <span class="tiny text-secondary">Semua adalah wajib kecuali lampiran "Surat Pengarah SSM"</span>
+    <span class="tiny text-secondary">Semua adalah wajib kecuali 1) Lampiran Surat Pengarah SSM</span>
     <div class="card">
         <div class="card-header">
             <span class="fa-solid fa-people-group"></span> <span class="text-primary">Pemain</span>
@@ -381,16 +379,28 @@
                     app.selectedColumn = target;
                     app.selection = choiceList;
 
+                    //remove any string from selectedSelection if does not exist in choiceList
+                    
                     if (app.selectedRecord[app.selectedColumn] == null || app.selectedRecord[app.selectedColumn] == undefined || app.selectedRecord[app.selectedColumn] == '')
-                        app.selectedSelection = [];
+                        app.selectedSelection = [];                    
                     else
                         app.selectedSelection = isMultiple ? app.selectedRecord[app.selectedColumn].split(',') : app.selectedRecord[app.selectedColumn];
 
+                    if (isMultiple) {
+                        let _temp = [];
+                        app.selectedSelection.forEach(function (item) {
+                            if (app.selection.includes(item)) {
+                                _temp.push(item);
+                            }
+                        });
+                        app.selectedSelection = _temp;
+                    }
+                    
                     $('#choiceModal').modal('show');
                 },
 
                 closeChoiceDialog: function () {
-
+                    console.log(app.selectedSelection);
                     app.selectedRecord[app.selectedColumn] = Array.isArray(app.selectedSelection) ? app.selectedSelection.join(',') : app.selectedSelection;
                     $('#choiceModal').modal('hide');
                 }

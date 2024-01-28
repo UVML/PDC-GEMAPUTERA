@@ -1,9 +1,6 @@
 ﻿@model IEnumerable<dynamic>
 @{
-    ViewData["Title"] = "Home Page";
-
-
-
+    
 }
 
 <div id="app">
@@ -166,7 +163,6 @@
                                         <td>Nama Agensi</td>
                                         <td>
                                             <input type="text" class="form-control" readonly value="@ViewBag.Agensi" />
-
                                         </td>
                                     </tr>
                                     <tr>
@@ -198,7 +194,8 @@
                         </div>
                         <div class="row">
                             <div class="col">
-                                <input type="file" class="form-control" accept=".pdf,.jpg"
+                                <span class="text-danger" style="text-align:justify; font-size:9pt">Sila muat naik bukti resit pembayaran</span>
+                                <input type="file" accept=".pdf,.jpg"
                                     @@change="handleFileChange()">
                             </div>
                             <div class="col-auto">

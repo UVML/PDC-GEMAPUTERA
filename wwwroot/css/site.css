@@ -33,14 +33,6 @@
   border-style: solid !important;
 }
 
-@media print
-{    
-    .no-print, .no-print *
-    {
-        display: none !important;
-    }
-}
-
 /* write a captcha class and trasform the angle to random degrees */
 .captcha {
   transform: rotate(5deg);

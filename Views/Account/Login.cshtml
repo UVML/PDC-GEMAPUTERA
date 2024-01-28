@@ -19,11 +19,14 @@
 
     <style>
         body {
-            background-color: #6495ED;
+            background: #6495ED;             
             justify-content: center;
             align-items: center;
             height: 100vh;
             display: flex;
+            background-size: cover;
+            background-position: center;
+            transition:  background 2s ease-in-out;
         }
     </style>
 </head>
@@ -39,7 +42,7 @@
                 <div class="col-auto">
                     <div class="card" style="background-color: rgba(255, 255, 255, 0.8); width:400px">
                         <div class="card-header text-center">
-                            <h3 class="text-primary">Sistem Pendaftaran</h2>
+                            <h3 class="text-primary">e-Daftar Gemaputera XVII</h2>
                         </div>
                         <div class="card-body">
                             <nav>
@@ -159,8 +162,7 @@
                                                     v-model="pengguna.TAC" placeholder="4-digit TAC">
                                             </div>
                                             <div class="mb-3">
-                                                <button @@click="daftar()" class="btn btn-success form-control"
-                                                :disabled="pengguna.kataLaluan !=  kataLaluanConfirm">Daftar</button>
+                                                <button @@click="daftar()" type="button" class="btn btn-success form-control">Daftar</button>
                                             </div>
                                         </div>
                                     </form>
@@ -195,12 +197,21 @@
 
             mounted() {
                 this.captcha();
+                this.setBackground();
             },
 
             methods: {
 
                 pengesahan() {
                     let hp = "60" + app.pengguna.telefon;
+                    
+                    var strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[+-=!@@#\$%\^&\*])");
+                    if (!strongRegex.test(app.pengguna.kataLaluan)) {
+                        document.getElementById("KataLaluan").setCustomValidity("Kata laluan perlu sekurang-kurangnya 1 huruf besar, 1 huruf kecil, 1 nombor dan 1 simbol.");
+                        document.getElementById("KataLaluan").reportValidity();
+                        return false;
+                    }
+                    
 
                     $.ajax({
                         url: '@Url.Content("~/Account/setTAC")',
@@ -222,7 +233,7 @@
                     });
                 },
 
-                 daftar() {
+                daftar() {
                     $.ajax({
                         url: '@Url.Content("~/Account/Daftar")',
                         type: "POST",
@@ -321,7 +332,36 @@
                     else {
                         toastr.error("Captcha tidak betul. Sila cuba semula.");
                     }
-                }
+                },
+
+                setBackground: function () {
+                    
+                    var images = [];
+
+                    console.log("test 1");
+                    $.ajax({
+                        url: '@Url.Content("~/Account/GetBackgroundImages")',
+                        type: "GET",
+                        success: function (response) {
+                            images = response;
+                        }
+                    });
+
+                    var i = 0;
+                    
+                    setInterval(function () {
+                        document.body.style.backgroundImage = 'url(/images/backgrounds/' + images[i] + ')';                        
+                        i = i + 1;
+                        
+                        if (i == images.length) {
+                            i = 0;
+                        }
+                    }, 3000);
+                    
+                    
+                },
+
+              
 
 
             }

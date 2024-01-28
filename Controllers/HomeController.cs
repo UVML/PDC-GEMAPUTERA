@@ -23,9 +23,7 @@ public class HomeController : Controller
     public HomeController(ApplicationDbContext applicationDbContext, IConfiguration configuration)
     {
         _Db = applicationDbContext;   
-        _Configuration = configuration;     
-
-       
+        _Configuration = configuration;            
     }
     
     
@@ -63,7 +61,7 @@ public class HomeController : Controller
         ViewBag.TotalFee    = _model.Sum(x => x.Fee).ToString("#,##0.00");
         ViewBag.Agensi      = _agensi;
         ViewBag.Bank        = JsonConvert.DeserializeObject(_Db.Setting.AsNoTracking().Where(x => x.Key == "Bank").Select(x => x.Value).Single());
-        ViewBag.TarikhTutup = DateTime.Parse( _Db.Setting.AsNoTracking().Where(x => x.Key == "TarikhTutup").Select(x => x.Value).Single()).ToString("dd/MM/yyyy");
+        ViewBag.TarikhTutup = await _Db.Agensi.AsNoTracking().Where(x => x.Nama == _agensi).Select(x => x.TarikhTutup.ToString("dd/MMM/yyyy")).SingleAsync();
 
         return View(_model);
     }
@@ -125,7 +123,6 @@ public class HomeController : Controller
         }
     }
 
-
     public async Task<IActionResult> TukarKataLaluan(string KataLaluanLama, string KataLaluanBaru)
     {
         var _result = false;
@@ -138,6 +135,10 @@ public class HomeController : Controller
             
             _result = true;       
         }
+
+        
+        var _actionName = this.ControllerContext.RouteData.Values["action"]?.ToString() ?? "";
+        await Helper.Log( _Db, _user.Emel, _actionName);
 
         return Json(new { status = _result });
     }

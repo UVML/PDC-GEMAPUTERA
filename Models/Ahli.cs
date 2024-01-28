@@ -25,6 +25,8 @@ public class Ahli
     public string? Telefon { get; set; }
     public string? GredJawatan { get; set; }
 
+    public string? StatusPemain {get; set;}
+
     
 
     [NotMapped]
@@ -35,17 +37,19 @@ public class Ahli
 
             if (string.IsNullOrEmpty(NamaPenuh) == false &&
                 string.IsNullOrEmpty(NoKP) == false &&
-                string.IsNullOrEmpty(NoPekerja) == false &&
-                string.IsNullOrEmpty(NoKWSP) == false &&
-                string.IsNullOrEmpty(TarafJawatan) == false &&
-                string.IsNullOrEmpty(KumpulanJawatan) == false &&
+                (JenisAhli=="Jurulatih" ? true : string.IsNullOrEmpty(NoPekerja) == false) &&
+                (JenisAhli=="Jurulatih" ? true : string.IsNullOrEmpty(NoKWSP) == false) &&
+                (JenisAhli=="Jurulatih" ? true :string.IsNullOrEmpty(TarafJawatan) == false) &&
+                (JenisAhli=="Jurulatih" ? true : string.IsNullOrEmpty(KumpulanJawatan) == false) &&
                 (JenisAhli=="Pemain" ? string.IsNullOrEmpty(KategoriPermainan) == false : true) &&
                 string.IsNullOrEmpty(FileGambar) == false &&
                 string.IsNullOrEmpty(FileKP) == false &&
-                string.IsNullOrEmpty(FileKWSP) == false &&
-                string.IsNullOrEmpty(FileMajikan) == false &&                
+                (JenisAhli=="Jurulatih" ? true : string.IsNullOrEmpty(FileKWSP) == false) &&
+                (JenisAhli=="Jurulatih" ? true :string.IsNullOrEmpty(FileMajikan) == false) &&                
                 string.IsNullOrEmpty(Telefon) == false &&
-                string.IsNullOrEmpty(GredJawatan) == false
+                (JenisAhli=="Jurulatih" ? true :string.IsNullOrEmpty(GredJawatan) == false) &&
+                (JenisAhli=="Jurulatih" || JenisAhli=="Pengurus" ? true :string.IsNullOrEmpty(StatusPemain) == false)
+
             )
             {
                 return true;

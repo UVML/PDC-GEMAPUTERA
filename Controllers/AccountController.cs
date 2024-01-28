@@ -50,7 +50,7 @@ public class AccountController : Controller
         var _result = false;
 
         if (_query != null && _query.KataLaluan == password)
-        {
+        {            
             var claims = new[]
             {
                 new Claim(ClaimTypes.Name, _query.Emel),
@@ -69,6 +69,8 @@ public class AccountController : Controller
 
             _result = true;
         }
+
+        await Helper.Log(_Db, $"{email}: {_result}", "AccountController/Login");
     
         return new JsonResult(new { status = _result, url = _url });
 
@@ -131,6 +133,8 @@ public class AccountController : Controller
     public async Task<IActionResult> setTAC(string msisdn)
     {
 
+        Console.WriteLine("⚠️ Calling setTAC");
+
         var _tac    = new Random().Next(1000, 9999);
         var _result = false;
 
@@ -141,10 +145,9 @@ public class AccountController : Controller
         {
             try
             {
-                var _payload = new { keyword= "NIOSH", msisdn = msisdn, message = "Pendaftaran Gemaputera 2024. Kod TAC anda adalah: " + _tac };
+                var _payload = new { keyword= "PDC", msisdn = msisdn, message = "Pendaftaran Gemaputera 2024. Kod TAC anda adalah: " + _tac };
                 var _client  = _httpClientFactory.CreateClient();
                 var _content = new StringContent(JsonConvert.SerializeObject(_payload), Encoding.UTF8, "application/json");
-                // _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes(_sms.API)));
                 
                 _client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", _sms.API);
                 _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -152,16 +155,15 @@ public class AccountController : Controller
                 var _response = await _client.PostAsync(_sms.Url, _content);
 
                 var _responseContent = await _response.Content.ReadAsStringAsync();
+                await Helper.Log(_Db, $"{msisdn}: {_responseContent}", "AccountController/setTAC");
+
                 if (_response.IsSuccessStatusCode)
                 {
                     HttpContext.Session.SetString("tac_code", _tac.ToString());
                     HttpContext.Session.SetString("tac_expiry", DateTime.Now.AddMinutes(5).ToString());
+
                     _result = true;
-                }
-                else
-                {
-                    await Helper.Log(_Db, _responseContent, "AccountController/setTAC");
-                }
+                }                
             }
             catch (Exception err)
             {
@@ -213,4 +215,11 @@ public class AccountController : Controller
 
     }
 
+
+    public async Task<IActionResult> GetBackgroundImages()
+    {
+        var _images = Directory.GetFiles("wwwroot/images/backgrounds").Select(x => Path.GetFileName(x)).ToList();
+        return new JsonResult(_images);
+
+    }
 }

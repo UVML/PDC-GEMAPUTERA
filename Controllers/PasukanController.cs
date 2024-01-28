@@ -75,26 +75,44 @@ public class PasukanController : Controller
     [HttpPost]
     public async Task<IActionResult> SetPasukan(List<Ahli> data)
     {
-        _Db.UpdateRange(data);
-        await _Db.SaveChangesAsync();
+        var _result = false;
 
-        return new JsonResult(new { status = true });
+        try
+        {
+            _Db.UpdateRange(data);
+            await _Db.SaveChangesAsync();
+
+            _result = true;
+
+            await Helper.Log( _Db, User.Identity?.Name ?? "", "PasukanController/SetPasukan");
+        }
+        catch (Exception err)        
+        {
+            await Helper.Log( _Db, err.Message, "PasukanController/SetPasukan");    
+        }
+
+        return new JsonResult(new { status = _result });
     }
 
     [HttpPost]
     public async Task<IActionResult> DelPasukan(List<Ahli> data)
     {
+        var _result = false;
+
         try
         {
             _Db.RemoveRange(data);
             await _Db.SaveChangesAsync();
 
-            return new JsonResult(new { status = true });
+            _result = true;
+            await Helper.Log( _Db, User.Identity?.Name ?? "", "PasukanController/DelPasukan");
         }
-        catch
+        catch (Exception err)
         {
-            return new JsonResult(new { status = false });
+            await Helper.Log( _Db, err.Message, "PasukanController/DelPasukan");
         }
+        
+        return new JsonResult(new { status = _result });
     }
 
 
@@ -129,13 +147,17 @@ public class PasukanController : Controller
 
     }
 
-    public async Task<IActionResult> Cetak(string sukan)
+    public async Task<IActionResult> Cetak(string sukan, string? agensi)
     {
-        var _agensi = User.Claims.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value).Single();
+        if (agensi == null)
+        {
+            agensi = User.Claims.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value).Single();
+        }
+        //var _agensi = User.Claims.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value).Single();
 
-        var _model = await _Db.Ahli.AsNoTracking().Where(x => x.JenisSukan == sukan && x.Agensi == _agensi).ToListAsync();
+        var _model = await _Db.Ahli.AsNoTracking().Where(x => x.JenisSukan == sukan && x.Agensi == agensi).ToListAsync();
 
-        ViewBag.TarikhTutup = await _Db.Setting.AsNoTracking().Where(x => x.Key == "TarikhTutup").Select(x => x.Value).SingleAsync();
+        ViewBag.TarikhTutup = await _Db.Agensi.AsNoTracking().Where(x => x.Nama == agensi).Select(x => x.TarikhTutup.ToString("dd/MMM/yyyy")).SingleAsync();
 
 
         return View(_model);

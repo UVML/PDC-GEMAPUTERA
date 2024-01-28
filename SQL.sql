@@ -30,24 +30,25 @@ INSERT INTO Pengguna (Agensi,Emel,KataLaluan) VALUES('Administrator', 'Administr
 GO
 
 CREATE TABLE [Agensi] (
-	Nama varchar(100) Primary Key
+	Nama varchar(100) Primary Key,
+	TarikhTutup datetime
 )
 GO
 
-INSERT INTO Agensi VALUES('Johor Corporation')
-INSERT INTO Agensi VALUES('Perbadanan Kemajuan Ekonomi Sarawak')
-INSERT INTO Agensi VALUES('Perbadanan Kemajuan Iktisad Negeri Kelantan')
-INSERT INTO Agensi VALUES('Perbadanan Kemajuan Negeri Kedah')
-INSERT INTO Agensi VALUES('Perbadanan Kemajuan Negeri Melaka')
-INSERT INTO Agensi VALUES('Perbadanan Kemajuan Negeri Pahang')
-INSERT INTO Agensi VALUES('Perbadanan Kemajuan Negeri Perak')
-INSERT INTO Agensi VALUES('Perbadanan Kemajuan Negeri Perlis')
-INSERT INTO Agensi VALUES('Perbadanan Kemajuan Negeri Selangor')
-INSERT INTO Agensi VALUES('Perbadanan Kemajuan Negeri, Negeri Sembilan')
-INSERT INTO Agensi VALUES('Perbadanan Memajukan Iktisad Negeri Terengganu')
-INSERT INTO Agensi VALUES('Perbadanan Pembangunan Ekonomi Negeri Sabah')
-INSERT INTO Agensi VALUES('Perbadanan Pembangunan Pulau Pinang')
-INSERT INTO Agensi VALUES('UDA Holdings Berhad')
+INSERT INTO Agensi VALUES('Johor Corporation','30/Apr/2024')
+INSERT INTO Agensi VALUES('Perbadanan Kemajuan Ekonomi Sarawak','30/Apr/2024')
+INSERT INTO Agensi VALUES('Perbadanan Kemajuan Iktisad Negeri Kelantan','30/Apr/2024')
+INSERT INTO Agensi VALUES('Perbadanan Kemajuan Negeri Kedah','30/Apr/2024')
+INSERT INTO Agensi VALUES('Perbadanan Kemajuan Negeri Melaka','30/Apr/2024')
+INSERT INTO Agensi VALUES('Perbadanan Kemajuan Negeri Pahang','30/Apr/2024')
+INSERT INTO Agensi VALUES('Perbadanan Kemajuan Negeri Perak','30/Apr/2024')
+INSERT INTO Agensi VALUES('Perbadanan Kemajuan Negeri Perlis','30/Apr/2024')
+INSERT INTO Agensi VALUES('Perbadanan Kemajuan Negeri Selangor','30/Apr/2024')
+INSERT INTO Agensi VALUES('Perbadanan Kemajuan Negeri, Negeri Sembilan','30/Apr/2024')
+INSERT INTO Agensi VALUES('Perbadanan Memajukan Iktisad Negeri Terengganu','30/Apr/2024')
+INSERT INTO Agensi VALUES('Perbadanan Pembangunan Ekonomi Negeri Sabah','30/Apr/2024')
+INSERT INTO Agensi VALUES('Perbadanan Pembangunan Pulau Pinang','30/Apr/2024')
+INSERT INTO Agensi VALUES('UDA Holdings Berhad','30/Apr/2024')
 GO
 
 
@@ -69,7 +70,8 @@ CREATE TABLE [Ahli] (
 	FileMajikan varchar(100),
 	FileSuratLantikan varchar(100),
 	Telefon varchar(100),
-	GredJawatan varchar(100)
+	GredJawatan varchar(100),
+	StatusPemain varchar(100)
 )
 GO
 
@@ -99,10 +101,10 @@ CREATE TABLE Setting (
 )
 GO
 
-INSERT INTO Setting VALUES('TarikhTutup', '1/May/2024')
-INSERT INTO Setting VALUES('Bank', '{Nama:"Maybank", NoAkaun:"1234567890"}')
-INSERT INTO Setting VALUES('SMTP', '{Host:"", Port:0, Username:"", Password:"", UseSSL:false, From:""}');
-INSERT INTO Setting VALUES('SMS','{Url:"https://mysmsdvsb.azurewebsites.net/api/messages", API:"aLl+dhCGAjfcreG0eFFGjpaFiEkQ+HHIs11J4AQmLQI="}');
+--INSERT INTO Setting VALUES('TarikhTutup', '1/May/2024')
+--INSERT INTO Setting VALUES('Bank', '{Nama:"Maybank", NoAkaun:"1234567890"}')
+--INSERT INTO Setting VALUES('SMTP', '{Host:"", Port:0, Username:"", Password:"", UseSSL:false, From:""}');
+--INSERT INTO Setting VALUES('SMS','{Url:"https://mysmsdvsb.azurewebsites.net/api/messages", API:"aLl+dhCGAjfcreG0eFFGjpaFiEkQ+HHIs11J4AQmLQI="}');
 GO
 
 CREATE TABLE Logger (

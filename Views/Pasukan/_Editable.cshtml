@@ -44,6 +44,9 @@
             </select>*@
             <input v-model="item.kategoriPermainan" placeholder="Kategori Permainan" class="form-control-sm" :class="{'is-valid' : !IsEmpty(item.kategoriPermainan)}" @@focus="openChoiceDialog(selectionKategoriPermainan, item, 'kategoriPermainan', true)"/>
         </td>
+        <td>
+            <input v-model="item.statusPemain" placeholder="Status Pemain" class="form-control-sm" :class="{'is-valid' : !IsEmpty(item.statusPemain)}" @@focus="openChoiceDialog(['Jabatan','Negeri (Sukma)', 'Kebangsaan', 'Profesional'], item, 'statusPemain', false)"/>
+        </td>
     </tr>
 </table>
 
