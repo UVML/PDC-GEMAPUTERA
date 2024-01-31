@@ -286,22 +286,25 @@
 
                 simpan: function () {
 
-                    $.ajax({
-                        url: '@Url.Content("~/Pasukan/SetPasukan")',
-                        type: 'POST',
-                        data: { data: app.record },
-                        success: function (data) {
-                            if (data.status == true) {
-                                toastr.success('Data berjaya disimpan');
-                            }
-                            else {
+                    if (confirm('Adakah anda pasti untuk mengemaskini kesemua rekod untuk sukan ini?')) {
+
+                        $.ajax({
+                            url: '@Url.Content("~/Pasukan/SetPasukan")',
+                            type: 'POST',
+                            data: { data: app.record },
+                            success: function (data) {
+                                if (data.status == true) {
+                                    toastr.success('Data berjaya disimpan');
+                                }
+                                else {
+                                    toastr.error('Data gagal disimpan');
+                                }
+                            },
+                            error: function (error) {
                                 toastr.error('Data gagal disimpan');
                             }
-                        },
-                        error: function (error) {
-                            toastr.error('Data gagal disimpan');
-                        }
-                    });
+                        });
+                    }
                 },
 
                 handleFileChange(index) {

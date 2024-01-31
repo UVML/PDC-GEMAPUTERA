@@ -3,6 +3,7 @@
     Layout = null;
     var i = 1;
     var Acara = Model.Select(x => x.JenisSukan).FirstOrDefault();
+    var Agensi = Model.Select(x=> x.Agensi).FirstOrDefault();
 }
 
 <!DOCTYPE html>
@@ -55,13 +56,14 @@
         <div class="col">
             <table class="table table-sm table-bordered small">
                 <tr>
-                    <td colspan="10">NAMA PERBADANAN:</td>
+                    <td>NAMA PERBADANAN:</td>
+                    <td colspan="10">@Agensi</td>
                 </tr>
                 <tr>
                     <td>BIL</td>
                     <td>NAMA PEGAWAI</td>
                     <td>JAWATAN</td>
-                    <td>NO. KWSP / SWAP</td>
+                    <td>NO. KWSP / KWAP</td>
                     <td>NO. KP</td>
                     <td>TELEFON</td>
                 </tr>
@@ -70,7 +72,7 @@
                     <tr>
                         <td>@i</td>
                         <td>@item.NamaPenuh</td>
-                        <td>@item.TarafJawatan</td>
+                        <td>@item.JenisAhli</td>
                         <td>@item.NoKWSP</td>
                         <td>@item.NoKP</td>
                         <td>@item.Telefon</td>
@@ -97,8 +99,9 @@
                     <td>BIL</td>
                     <td>NAMA PEGAWAI</td>
                     <td>NO K/P</td>
-                    <td>KETEGORI PERMAINAN</td>
+                    <td>KATEGORI</td>
                     <td>NO. KWSP / KWAP</td>
+                    <td>KUMPULAN JAWATAN</td>
                     <td>STATUS PEMAIN</td>
                 </tr>
                 @foreach (var item in Model.Where(x => x.JenisAhli == "Pemain"))
@@ -109,6 +112,7 @@
                         <td>@item.NoKP</td>
                         <td>@item.KategoriPermainan</td>
                         <td>@item.NoKWSP</td>
+                        <td>@item.KumpulanJawatan</td>
                         <td>@item.StatusPemain</td>
                     </tr>
 
@@ -121,12 +125,13 @@
         <div class="col small">
             Nota:
             <ol>
-                <li>Kelayakan peserta adalah berdasarkan syarat peraturan pertandingan Badminton Kejohanan Sukan
+                <li>Kelayakan peserta adalah berdasarkan syarat peraturan pertandingan @Acara Kejohanan Sukan
                     Gemaputera
                     Pulau Pinang 2024</li>
                 <li>Sila email dokumen yang telah lengkap disahkan & ditandatangani kepada Urusetia Gemaputera XVII
                     Pulau
                     Pinang 2024 ke alamat emel : fatinrazak@pdc.gov.my / syuhada@pdc.gov.my</li>
+                <li>Jawatankuasa Penganjur tidak bertanggungjawab ke atas sebarang tuntutan, kerugian, kecederaan atau apa-apa tuntutan sebelum, semasa dan selepas kejohanan ini berlangsung.</li>
             </ol>
             <p>TARIKH TUTUP PENYERTAAN <strong>@ViewBag.TarikhTutup</strong></p>            
             <p>Kami telah membaca dan memahami serta akan mematuhi syarat-syarat dan peraturan-peraturan kejohanan yang

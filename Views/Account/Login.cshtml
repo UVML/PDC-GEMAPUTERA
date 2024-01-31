@@ -207,7 +207,7 @@
                     
                     var strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[+-=!@@#\$%\^&\*])");
                     if (!strongRegex.test(app.pengguna.kataLaluan)) {
-                        document.getElementById("KataLaluan").setCustomValidity("Kata laluan perlu sekurang-kurangnya 1 huruf besar, 1 huruf kecil, 1 nombor dan 1 simbol.");
+                        document.getElementById("KataLaluan").setCustomValidity("Kata laluan perlu sekurang-kurangnya 8 huruf, 1 huruf besar, 1 huruf kecil, 1 nombor dan 1 simbol.");
                         document.getElementById("KataLaluan").reportValidity();
                         return false;
                     }
