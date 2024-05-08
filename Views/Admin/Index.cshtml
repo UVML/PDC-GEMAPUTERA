@@ -29,7 +29,7 @@
                        
                         @foreach (var item in Model)
                         {
-                            var _agensi = item.Agensi.Replace(" ", "");
+                            var _agensi = item.Agensi.Replace(" ", "").Replace(",","");
                             
                             <div class="card mb-3">
                                 <div class="card-header">
@@ -379,22 +379,25 @@
             $('[data-bs-toggle="tooltip"]').tooltip();
         });
     
-         var app = new Vue({
+        const { createApp, ref } = Vue;        
+        const app = createApp({        
             el: '#app',
-            data: {
-                kataLaluan: {
-                    lama: '',
-                    baru: '',
-                    confirm: ''
-                },
-                setup: {
-                    pengguna:[],
-                    sukan:[],
-                    agensi: [],
-                },
-                attachment: @Html.Raw(Json.Serialize(ViewBag.Attachment)), 
+            data() {
+                return {
+                    kataLaluan: {
+                        lama: '',
+                        baru: '',
+                        confirm: ''
+                    },
+                    setup: {
+                        pengguna:[],
+                        sukan:[],
+                        agensi: [],
+                    },
+                    attachment: @Html.Raw(Json.Serialize(ViewBag.Attachment)), 
 
-                model:[]               
+                    model:[]               
+                }
             },
             computed: {
             },
@@ -619,7 +622,7 @@
                 
             },
 
-        })
+        }).mount('#app');
     
     
     </script>

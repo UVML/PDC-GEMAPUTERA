@@ -180,19 +180,23 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     <script>
 
-        var app = new Vue({
+        const { createApp, ref } = Vue;
+        
+        const app = createApp({
             el: '#app',
-            data: {
-                pengguna: { agensi: "0", emel: "", namaPenuh: "", jawatan: "", telefon: "", kataLaluan: "", TAC: "" },
-                kataLaluanConfirm: "",
-                IsWait: false,
-                captchaKey: "",
-                IsTAC : false,
+            data() {
+                return {
+                    pengguna: { agensi: "0", emel: "", namaPenuh: "", jawatan: "", telefon: "", kataLaluan: "", TAC: "" },
+                    kataLaluanConfirm: "",
+                    IsWait: false,
+                    captchaKey: "",
+                    IsTAC : false,
+                }
             },
 
             mounted() {
@@ -365,7 +369,7 @@
 
 
             }
-        });
+        }).mount('#app');
 
     </script>
 </body>

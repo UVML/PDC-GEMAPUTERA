@@ -220,23 +220,23 @@
 
 @section Scripts {
     <script>
-
-
-
-        var app = new Vue({
+        const { createApp, ref } = Vue;        
+        const app = createApp({
             el: '#app',
-            data: {
-                record: [],
-                activeUploadFile: '',
-                selectedUploadDialogHeader: '',
-                selectedSukan: 'Pilih Sukan',
-                selectedRecord: {},
-                selectedColumn: '',
-                selectedUploadDialogExtension: '',
-                selectionKategoriPermainan: [],
-                selection: [],
-                selectedSelection: [],
-                IsSelectionMultiple: false
+            data() {
+                return  {
+                    record: [],
+                    activeUploadFile: '',
+                    selectedUploadDialogHeader: '',
+                    selectedSukan: 'Pilih Sukan',
+                    selectedRecord: {},
+                    selectedColumn: '',
+                    selectedUploadDialogExtension: '',
+                    selectionKategoriPermainan: [],
+                    selection: [],
+                    selectedSelection: [],
+                    IsSelectionMultiple: false
+                }
             },
             mounted() {
 
@@ -408,7 +408,7 @@
                     $('#choiceModal').modal('hide');
                 }
             },
-        });
+        }).mount('#app');
 
 
 

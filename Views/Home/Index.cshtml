@@ -220,16 +220,20 @@
 
 @section Scripts {
     <script>
-        var app = new Vue({
+
+        const { createApp, ref } = Vue;        
+        const app = createApp({        
             el: '#app',
-            data: {
-                Attachment: {},
-                TempResit: null,
-                Perakuan: false,
-                KataLaluanLama: '',
-                KataLaluanBaru: '',
-                KataLaluanConfirm: '',
-                Catatan: ''
+            data() {
+                return {
+                    Attachment: {},
+                    TempResit: null,
+                    Perakuan: false,
+                    KataLaluanLama: '',
+                    KataLaluanBaru: '',
+                    KataLaluanConfirm: '',
+                    Catatan: ''
+                }
             },
             computed: {
 
@@ -317,6 +321,6 @@
 
             },
 
-        })
+        }).mount('#app');
     </script>
 }
