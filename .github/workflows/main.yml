@@ -1,0 +1,9 @@
+on:
+  workflow_dispatch:
+  
+jobs:
+  my_job:
+    name: testing
+    runs-on: windows-latest
+    steps:
+      - run: echo Hello World
